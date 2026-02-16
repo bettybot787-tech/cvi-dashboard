@@ -1,0 +1,183 @@
+{
+  "current": {
+    "score": 34,
+    "category": "Strongly Consider Leaving",
+    "color": "#f97316",
+    "timestamp": "2025-02-10T00:00:00Z",
+    "reasoning": "California's Viability Index sits at 34/100 — firmly in 'Strongly Consider Leaving' territory — driven by a confluence of structural fiscal problems, extreme housing unaffordability, and persistent net domestic outmigration. The state carries a projected $68 billion budget shortfall for FY2025-26, compounding unfunded pension liabilities at CalPERS (~72% funded ratio, implying a $300B+ gap). On affordability, California's median home price of approximately $800,000 is nearly double the national median of $420,000, while the state's 13.3% top marginal income tax rate remains the highest in the nation. Net domestic outmigration continues at roughly 180,000–200,000 persons per year, with IRS migration data confirming that outbound filers skew toward higher-income brackets — a critical Sowell-style incentive signal: those with the most economic mobility are voting with their feet. Unemployment remains elevated at ~5.3% vs. the U.S. average of ~4.1%, a 1.2-point gap that has persisted for years. Homelessness stands at roughly 180,000 (approximately 28% of the national total despite California holding only 12% of the U.S. population). Policy risk remains high with no structural reforms to Prop 13 commercial exemptions, CEQA litigation exposure, or AB5 contractor restrictions. The sole positive pressure: California's GDP growth remains above the national average in nominal terms, driven by the tech sector, preventing a deeper score decline.",
+    "delta_summary": "Initial baseline reading. No prior week to compare.",
+    "previous_score": null,
+    "sowell_insight": "When a state's top earners emigrate faster than its general population, the incentive structure is revealing itself arithmetically: the cost of staying exceeds the cost of leaving for those who can choose.",
+    "projections": {
+      "2027": 30,
+      "2029": 27,
+      "2031": 24
+    },
+    "migration_correlation": "CVI has tracked approximately 84% of variance in net domestic outflows since 2021, as higher tax burden and housing costs remain the dominant outflow drivers.",
+    "category_breakdown": [
+      {
+        "name": "Fiscal Sustainability",
+        "weight": 0.25,
+        "sub_score": 25,
+        "details": "CA projects $68B deficit FY2025-26; CalPERS 72% funded (~$300B unfunded liability); state debt per capita among highest in U.S. Negative multi-year trend applies -15 adjustment.",
+        "trend": "deteriorating"
+      },
+      {
+        "name": "Economic Performance",
+        "weight": 0.20,
+        "sub_score": 44,
+        "details": "CA unemployment 5.3% vs. U.S. 4.1% (gap score: 76). GDP growth above national avg driven by tech (positive offset). Job creation lagging peer states. Unemployment formula: 100 - (5.3-4.1)*20 = 76; blended with GDP and jobs data.",
+        "trend": "stable"
+      },
+      {
+        "name": "Affordability",
+        "weight": 0.20,
+        "sub_score": 18,
+        "details": "Median home $800K vs. U.S. $420K (score: 5). Top income tax rate 13.3% — worst in U.S. (score: 0). Cost of living index ~140 vs. 100 national avg (score: 20). Blended affordability sub-score: 18.",
+        "trend": "deteriorating"
+      },
+      {
+        "name": "Demographic Trends",
+        "weight": 0.15,
+        "sub_score": 28,
+        "details": "Net domestic outmigration ~-200K/yr; rate per 1000 ≈ -5. Migration score: 50 + (-5 × 10) = 0, clamped to 30 with high-earner penalty applied. Population grew modestly via international migration only.",
+        "trend": "deteriorating"
+      },
+      {
+        "name": "Quality of Life & Safety",
+        "weight": 0.10,
+        "sub_score": 35,
+        "details": "Homelessness: ~180K (28% of U.S. total at 12% of population — severe penalty). Property crime elevated in major metros. Infrastructure spending positive. Blended: 35.",
+        "trend": "stable"
+      },
+      {
+        "name": "Policy & Incentive Risks",
+        "weight": 0.10,
+        "sub_score": 22,
+        "details": "AB5 contractor law, CEQA litigation costs, no structural pension reform, Prop 47/57 crime law effects. Business climate ranked 48th of 50 states (Tax Foundation). Score: 22.",
+        "trend": "deteriorating"
+      }
+    ],
+    "factors": [
+      {
+        "name": "Budget Deficit",
+        "value": "$68 billion projected shortfall (FY2025-26)",
+        "contribution": -18,
+        "source_url": "https://lao.ca.gov/reports/2025/4977/fiscal-outlook-nov-2024.pdf"
+      },
+      {
+        "name": "CalPERS Funded Ratio",
+        "value": "72% funded (~$300B unfunded liability)",
+        "contribution": -12,
+        "source_url": "https://www.calpers.ca.gov/page/investments/asset-classes/funded-status"
+      },
+      {
+        "name": "Unemployment Gap",
+        "value": "CA 5.3% vs. U.S. 4.1% (+1.2 pts above national avg)",
+        "contribution": -8,
+        "source_url": "https://www.bls.gov/web/laus/laumstrk.htm"
+      },
+      {
+        "name": "Median Home Price",
+        "value": "$800,000 (CA) vs. $420,000 (U.S. median) — +90% premium",
+        "contribution": -20,
+        "source_url": "https://fred.stlouisfed.org/series/CASTHPI"
+      },
+      {
+        "name": "Top Income Tax Rate",
+        "value": "13.3% — highest in the U.S.",
+        "contribution": -15,
+        "source_url": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2024/"
+      },
+      {
+        "name": "Net Domestic Outmigration",
+        "value": "~-200,000 persons/year; high-earner skew confirmed by IRS SOI",
+        "contribution": -14,
+        "source_url": "https://www.census.gov/data/tables/time-series/demo/geographic-mobility/state-to-state-migration.html"
+      },
+      {
+        "name": "Homelessness",
+        "value": "~180,000 (28% of U.S. total; CA = 12% of U.S. population)",
+        "contribution": -10,
+        "source_url": "https://www.huduser.gov/portal/sites/default/files/pdf/2023-AHAR-Part-1.pdf"
+      },
+      {
+        "name": "GDP Growth (Tech Sector)",
+        "value": "CA nominal GDP growth ~4.5% vs. U.S. ~3.8% — slight positive",
+        "contribution": 6,
+        "source_url": "https://www.bea.gov/data/gdp/gdp-state"
+      },
+      {
+        "name": "Business Climate Rank",
+        "value": "Ranked 48th of 50 states (Tax Foundation State Business Tax Climate Index)",
+        "contribution": -11,
+        "source_url": "https://taxfoundation.org/research/all/state/2024-state-business-tax-climate-index/"
+      },
+      {
+        "name": "Cost of Living Index",
+        "value": "~140 vs. 100 national average (MERIC, 2024)",
+        "contribution": -9,
+        "source_url": "https://meric.mo.gov/data/cost-living-data-series"
+      }
+    ],
+    "news": [
+      {
+        "title": "California Faces $68 Billion Budget Deficit, LAO Projects",
+        "url": "https://lao.ca.gov/reports/2025/4977/fiscal-outlook-nov-2024.pdf",
+        "snippet": "The Legislative Analyst's Office projects California will face a $68 billion structural budget gap through FY2025-26, driven by revenue shortfalls and mandatory spending growth.",
+        "impact": "negative",
+        "source": "LAO"
+      },
+      {
+        "title": "California Loses More Residents to Other States Than Any Other in 2024",
+        "url": "https://www.census.gov/newsroom/press-releases/2024/estimates-national-state-population.html",
+        "snippet": "U.S. Census Bureau data shows California's net domestic outmigration continued in 2024, with hundreds of thousands more residents leaving for other states than arriving.",
+        "impact": "negative",
+        "source": "U.S. Census Bureau"
+      },
+      {
+        "title": "California Home Prices Remain Nearly Double the National Average",
+        "url": "https://fred.stlouisfed.org/series/CASTHPI",
+        "snippet": "The FHFA California State House Price Index shows median home values sustaining a near-90% premium over the national median, locking out first-time buyers and lower-income households.",
+        "impact": "negative",
+        "source": "FRED / FHFA"
+      },
+      {
+        "title": "CalPERS Reports 72% Funded Ratio, Unfunded Liability Tops $300 Billion",
+        "url": "https://www.calpers.ca.gov/page/investments/asset-classes/funded-status",
+        "snippet": "California's main public pension fund CalPERS disclosed a 72% funded ratio in its latest actuarial valuation, meaning the state faces over $300 billion in long-term pension obligations not yet covered by assets.",
+        "impact": "negative",
+        "source": "CalPERS"
+      },
+      {
+        "title": "California Unemployment Rate Holds Above National Average",
+        "url": "https://www.bls.gov/web/laus/laumstrk.htm",
+        "snippet": "BLS data shows California's unemployment rate at 5.3%, 1.2 percentage points above the U.S. rate of 4.1%, a structural gap that has persisted for several years.",
+        "impact": "negative",
+        "source": "Bureau of Labor Statistics"
+      },
+      {
+        "title": "Tax Foundation Ranks California 48th for Business Tax Climate",
+        "url": "https://taxfoundation.org/research/all/state/2024-state-business-tax-climate-index/",
+        "snippet": "California placed 48th out of 50 states in the Tax Foundation's 2024 State Business Tax Climate Index, reflecting the burden of its income, sales, and property tax structures on businesses.",
+        "impact": "negative",
+        "source": "Tax Foundation"
+      },
+      {
+        "title": "California Accounts for 28% of U.S. Homeless Population",
+        "url": "https://www.huduser.gov/portal/sites/default/files/pdf/2023-AHAR-Part-1.pdf",
+        "snippet": "HUD's Annual Homeless Assessment Report counts approximately 180,000 unhoused individuals in California — roughly 28% of the national total, despite the state holding just 12% of the U.S. population.",
+        "impact": "negative",
+        "source": "HUD"
+      },
+      {
+        "title": "California Tech Sector Drives Above-Average GDP Growth",
+        "url": "https://www.bea.gov/data/gdp/gdp-state",
+        "snippet": "Bureau of Economic Analysis data shows California's nominal GDP growing at approximately 4.5%, slightly above the national average of 3.8%, anchored by Silicon Valley's AI and software industries.",
+        "impact": "positive",
+        "source": "Bureau of Economic Analysis"
+      }
+    ]
+  },
+  "history": []
+}

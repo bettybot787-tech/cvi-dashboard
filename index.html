@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>California Viability Index</title>
+  <meta name="description" content="A Sowell-inspired composite 0–100 gauge tracking California's fiscal sustainability, economic performance, affordability, and demographic incentives." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+              600: '#475569',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    body { background-color: #0f172a; font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Gauge wrapper */
+    .gauge-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .gauge-canvas-container {
+      position: relative;
+      width: 100%;
+      /* Aspect ratio: canvas is a half-circle, so height ~55% of width */
+    }
+    .gauge-canvas-container canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+    /* Central score overlay — positioned at bottom-center of the half-doughnut */
+    .gauge-overlay {
+      position: absolute;
+      bottom: 2%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      pointer-events: none;
+      width: 100%;
+    }
+
+    /* Band label pills */
+    .band-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .band-label {
+      flex: 1;
+      min-width: 0;
+      text-align: center;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 3px 4px;
+      border-radius: 4px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Progress bar */
+    .progress-bar-track {
+      background: #334155;
+      border-radius: 9999px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 1s ease;
+    }
+
+    /* Score delta badge */
+    .delta-up   { color: #22c55e; }
+    .delta-down { color: #ef4444; }
+    .delta-flat { color: #94a3b8; }
+
+    /* News impact dots */
+    .dot-negative { background: #ef4444; }
+    .dot-positive { background: #22c55e; }
+    .dot-neutral  { background: #94a3b8; }
+
+    /* Animate score number */
+    @keyframes scoreIn {
+      from { opacity: 0; transform: translateX(-50%) scale(0.7); }
+      to   { opacity: 1; transform: translateX(-50%) scale(1); }
+    }
+    .score-animate { animation: scoreIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
+
+    /* Subtle card hover */
+    .factor-card { transition: border-color 0.2s, box-shadow 0.2s; }
+    .factor-card:hover { border-color: #64748b; box-shadow: 0 0 0 1px #475569; }
+
+    /* Sparkline tooltip hide */
+    .sparkline-container { position: relative; height: 80px; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-100 antialiased">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-black text-sm">CA</div>
+        <div>
+          <h1 class="text-sm font-bold text-white leading-tight">California Viability Index</h1>
+          <p class="text-xs text-slate-400 leading-tight">Sowell-inspired 0–100 structural health gauge</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <div id="header-score" class="text-lg font-black text-orange-400">—</div>
+        <div id="header-updated" class="text-xs text-slate-500">Loading…</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN
+  ═══════════════════════════════════════════════════════════ -->
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- LOADING STATE -->
+    <div id="loading-state" class="flex flex-col items-center justify-center py-20 text-slate-500">
+      <svg class="animate-spin w-8 h-8 mb-4" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+      </svg>
+      <p class="text-sm">Loading CVI data…</p>
+    </div>
+
+    <!-- MAIN CONTENT (hidden until data loads) -->
+    <div id="main-content" class="hidden space-y-8">
+
+      <!-- ── GAUGE + SCORE HERO ─────────────────────────────── -->
+      <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 md:p-10">
+        <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+
+          <!-- Gauge -->
+          <div class="gauge-wrapper flex-shrink-0 w-full lg:w-[420px]">
+            <div class="gauge-canvas-container">
+              <canvas id="gaugeChart"></canvas>
+              <!-- Score Overlay -->
+              <div class="gauge-overlay score-animate">
+                <div id="gauge-score" class="text-6xl md:text-7xl font-black leading-none" style="color:#f97316">—</div>
+                <div class="text-slate-400 text-sm font-medium mt-1">out of 100</div>
+              </div>
+            </div>
+
+            <!-- Band labels row -->
+            <div class="band-labels mt-2 px-1">
+              <div class="band-label" style="background:#dc262622;color:#dc2626;">Leave Now<br/>0–25</div>
+              <div class="band-label" style="background:#f9731622;color:#f97316;">Consider<br/>26–45</div>
+              <div class="band-label" style="background:#eab30822;color:#eab308;">Neutral<br/>46–60</div>
+              <div class="band-label" style="background:#84cc1622;color:#84cc16;">Attractive<br/>61–80</div>
+              <div class="band-label" style="background:#22c55e22;color:#22c55e;">Move Here<br/>81–100</div>
+            </div>
+          </div>
+
+          <!-- Score Details -->
+          <div class="flex-1 text-center lg:text-left space-y-4">
+
+            <div>
+              <div id="category-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-3" style="background:#f9731622;color:#f97316;">—</div>
+              <h2 id="category-label" class="text-3xl md:text-4xl font-black text-white leading-tight">Loading…</h2>
+            </div>
+
+            <!-- Delta -->
+            <div id="delta-block" class="flex items-center justify-center lg:justify-start gap-2 text-sm">
+              <span id="delta-arrow" class="text-xl font-black delta-flat">→</span>
+              <span id="delta-text" class="text-slate-400">—</span>
+            </div>
+
+            <!-- Sowell Insight -->
+            <blockquote id="sowell-insight" class="border-l-2 border-slate-600 pl-4 italic text-slate-400 text-sm leading-relaxed"></blockquote>
+
+            <!-- Mini stats row -->
+            <div class="grid grid-cols-3 gap-3 mt-2">
+              <div class="bg-slate-900/60 rounded-xl p-3 text-center">
+                <div id="stat-previous" class="text-xl font-bold text-slate-300">—</div>
+                <div class="text-xs text-slate-500 mt-0.5">Last Week</div>
+              </div>
+              <div class="bg-slate-900/60 rounded-xl p-3 text-center">
+                <div id="stat-proj-2027" class="text-xl font-bold text-slate-300">—</div>
+                <div class="text-xs text-slate-500 mt-0.5">Proj. 2027</div>
+              </div>
+              <div class="bg-slate-900/60 rounded-xl p-3 text-center">
+                <div id="stat-proj-2031" class="text-xl font-bold text-slate-300">—</div>
+                <div class="text-xs text-slate-500 mt-0.5">Proj. 2031</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- History sparkline -->
+        <div id="sparkline-section" class="hidden mt-6 pt-6 border-t border-slate-700/50">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Historical Score (last 12 weeks)</p>
+          <div class="sparkline-container">
+            <canvas id="sparklineChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── REASONING ──────────────────────────────────────── -->
+      <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Analysis & Reasoning</h3>
+        <p id="reasoning-text" class="text-slate-300 leading-relaxed text-sm md:text-base"></p>
+        <div id="delta-summary" class="mt-4 bg-slate-900/50 rounded-xl p-4 border border-slate-700/50 text-sm text-slate-400 italic"></div>
+      </section>
+
+      <!-- ── CATEGORY BREAKDOWN ─────────────────────────────── -->
+      <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Category Breakdown</h3>
+        <div id="category-breakdown" class="space-y-4"></div>
+      </section>
+
+      <!-- ── TWO-COLUMN: FACTORS + NEWS ────────────────────── -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Key Factors -->
+        <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Key Influencing Factors</h3>
+          <div id="factors-list" class="space-y-3"></div>
+        </section>
+
+        <!-- Recent News -->
+        <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Recent Relevant News</h3>
+          <div id="news-list" class="space-y-4"></div>
+        </section>
+
+      </div>
+
+      <!-- ── PROJECTIONS ─────────────────────────────────────── -->
+      <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Projections &amp; Migration Correlation</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p class="text-sm font-semibold text-slate-400 mb-3">Score Trajectory (Under Current Trends)</p>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-slate-900/60 rounded-xl p-4 text-center">
+                <div id="proj-2027" class="text-2xl font-black text-red-400">—</div>
+                <div class="text-xs text-slate-500 mt-1">2027</div>
+              </div>
+              <div class="bg-slate-900/60 rounded-xl p-4 text-center">
+                <div id="proj-2029" class="text-2xl font-black text-red-500">—</div>
+                <div class="text-xs text-slate-500 mt-1">2029</div>
+              </div>
+              <div class="bg-slate-900/60 rounded-xl p-4 text-center">
+                <div id="proj-2031" class="text-2xl font-black text-red-600">—</div>
+                <div class="text-xs text-slate-500 mt-1">2031</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-400 mb-3">Migration Correlation</p>
+            <div class="bg-slate-900/60 rounded-xl p-4">
+              <p id="migration-correlation" class="text-slate-300 text-sm leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /main-content -->
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════════ -->
+  <footer class="border-t border-slate-800 mt-8 py-6">
+    <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-600 space-y-1">
+      <p>California Viability Index — Sowell-inspired composite indicator. Not financial or political advice. Data-driven incentive analysis only.</p>
+      <p>Sources: BLS · U.S. Census · CA DOF / LAO · BEA · Tax Foundation · CalPERS · HUD · PPIC · FRED</p>
+      <p>Updated automatically every Monday via GitHub Actions. Open source — <a href="https://github.com/bettybot787-tech/cvi-dashboard" class="underline hover:text-slate-400 transition-colors">View on GitHub</a></p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // ─── BAND DEFINITIONS ──────────────────────────────────────
+    const BANDS = [
+      { min: 0,  max: 25,  label: 'Leave California Now',       color: '#dc2626', bg: '#dc262615' },
+      { min: 26, max: 45,  label: 'Strongly Consider Leaving',  color: '#f97316', bg: '#f9731615' },
+      { min: 46, max: 60,  label: 'Neutral / Monitor Closely',  color: '#eab308', bg: '#eab30815' },
+      { min: 61, max: 80,  label: 'Mildly Attractive',          color: '#84cc16', bg: '#84cc1615' },
+      { min: 81, max: 100, label: 'Move to California Now',     color: '#22c55e', bg: '#22c55e15' },
+    ];
+
+    function getBand(score) {
+      return BANDS.find(b => score >= b.min && score <= b.max) || BANDS[0];
+    }
+
+    // ─── GAUGE CHART ───────────────────────────────────────────
+    let gaugeChart = null;
+
+    // Custom needle plugin
+    const needlePlugin = {
+      id: 'needlePlugin',
+      afterDraw(chart) {
+        if (chart.config.type !== 'doughnut') return;
+        const { ctx, chartArea } = chart;
+        if (!chartArea) return;
+
+        const score = chart.config.options.plugins.needle.score;
+        const cx = (chartArea.left + chartArea.right) / 2;
+        const cy = (chartArea.bottom + chartArea.top) / 2 + (chartArea.bottom - chartArea.top) * 0.22;
+
+        // The half-arc spans from -180° to 0° (left to right)
+        // score=0 → -180° (left), score=100 → 0° (right)
+        const angleRad = (Math.PI) * (score / 100); // 0 → 0, 100 → π
+        const needleAngle = Math.PI - angleRad; // convert: 0→π (left), 100→0 (right)
+
+        // Needle length: ~42% of chart area width
+        const radius = Math.min(chartArea.right - chartArea.left, chartArea.bottom - chartArea.top) * 0.42;
+        const needleLength = radius * 0.85;
+        const needleWidth = 3;
+
+        const tipX = cx + needleLength * Math.cos(needleAngle);
+        const tipY = cy - needleLength * Math.sin(needleAngle);
+
+        // Draw shadow
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 6;
+
+        // Needle line
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(tipX, tipY);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = needleWidth;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+
+        // Small triangle tip
+        const tipAngle = Math.atan2(cy - tipY, tipX - cx);
+        ctx.beginPath();
+        ctx.moveTo(tipX, tipY);
+        ctx.lineTo(
+          tipX - 10 * Math.cos(tipAngle - 0.3),
+          tipY + 10 * Math.sin(tipAngle - 0.3)
+        );
+        ctx.lineTo(
+          tipX - 10 * Math.cos(tipAngle + 0.3),
+          tipY + 10 * Math.sin(tipAngle + 0.3)
+        );
+        ctx.closePath();
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+
+        ctx.restore();
+
+        // Center dot
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#1e293b';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    };
+
+    Chart.register(needlePlugin);
+
+    function buildGauge(score) {
+      const band = getBand(score);
+      const ctx = document.getElementById('gaugeChart').getContext('2d');
+
+      if (gaugeChart) gaugeChart.destroy();
+
+      gaugeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            // 5 segments proportional to band widths: 25, 20, 15, 20, 20
+            data: [25, 20, 15, 20, 20],
+            backgroundColor: ['#dc2626', '#f97316', '#eab308', '#84cc16', '#22c55e'],
+            borderWidth: 0,
+            borderRadius: 0,
+            hoverOffset: 0,
+          }]
+        },
+        options: {
+          circumference: 180,
+          rotation: -90,
+          cutout: '68%',
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 800, easing: 'easeInOutQuart' },
+          plugins: {
+            tooltip: { enabled: false },
+            legend: { display: false },
+            needle: { score }
+          },
+          events: [],
+        },
+        plugins: [needlePlugin]
+      });
+
+      // Set canvas aspect ratio after build
+      const canvas = document.getElementById('gaugeChart');
+      canvas.parentElement.style.paddingBottom = '55%';
+      canvas.parentElement.style.height = '0';
+      canvas.parentElement.style.position = 'relative';
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+
+      // Update overlay
+      const scoreEl = document.getElementById('gauge-score');
+      scoreEl.textContent = score;
+      scoreEl.style.color = band.color;
+    }
+
+    // ─── SPARKLINE ─────────────────────────────────────────────
+    let sparklineChart = null;
+
+    function buildSparkline(history) {
+      if (!history || history.length < 2) return;
+      document.getElementById('sparkline-section').classList.remove('hidden');
+
+      const labels = history.map(h => {
+        const d = new Date(h.timestamp);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      });
+      const scores = history.map(h => h.score);
+
+      const ctx = document.getElementById('sparklineChart').getContext('2d');
+      if (sparklineChart) sparklineChart.destroy();
+
+      sparklineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            data: scores,
+            borderColor: '#f97316',
+            backgroundColor: 'rgba(249,115,22,0.08)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointBackgroundColor: '#f97316',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#33415540' }, ticks: { color: '#64748b', font: { size: 10 } } },
+            y: { min: 0, max: 100, grid: { color: '#33415540' }, ticks: { color: '#64748b', font: { size: 10 }, stepSize: 25 } }
+          },
+          plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }
+        }
+      });
+    }
+
+    // ─── RENDER CATEGORY BREAKDOWN ─────────────────────────────
+    function renderCategories(breakdown) {
+      const container = document.getElementById('category-breakdown');
+      container.innerHTML = '';
+
+      breakdown.forEach(cat => {
+        const pct = cat.weight * 100;
+        const score = cat.sub_score;
+        const color = score >= 60 ? '#22c55e' : score >= 40 ? '#eab308' : '#ef4444';
+        const trendIcon = { improving: '↑', deteriorating: '↓', stable: '→' }[cat.trend] || '→';
+        const trendColor = { improving: 'text-green-400', deteriorating: 'text-red-400', stable: 'text-slate-400' }[cat.trend] || 'text-slate-400';
+
+        container.insertAdjacentHTML('beforeend', `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-200">${cat.name}</span>
+                <span class="text-xs text-slate-500 font-medium">(${pct}%)</span>
+                <span class="text-xs font-bold ${trendColor}">${trendIcon}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold" style="color:${color}">${score}/100</span>
+                <span class="text-xs text-slate-500">contributes ${Math.round(score * cat.weight)} pts</span>
+              </div>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" style="width:${score}%;background:${color};"></div>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">${cat.details}</p>
+          </div>
+        `);
+      });
+    }
+
+    // ─── RENDER FACTORS ────────────────────────────────────────
+    function renderFactors(factors) {
+      const container = document.getElementById('factors-list');
+      container.innerHTML = '';
+
+      factors.forEach(f => {
+        const isPos = f.contribution > 0;
+        const contribColor = isPos ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10';
+        const contribSign = isPos ? '+' : '';
+
+        container.insertAdjacentHTML('beforeend', `
+          <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-slate-200 text-sm leading-tight">${f.name}</p>
+                <p class="text-xs text-slate-400 mt-1 leading-snug">${f.value}</p>
+              </div>
+              <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${contribColor}">${contribSign}${f.contribution} pts</span>
+                <a href="${f.source_url}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline">Source ↗</a>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    }
+
+    // ─── RENDER NEWS ───────────────────────────────────────────
+    function renderNews(news) {
+      const container = document.getElementById('news-list');
+      container.innerHTML = '';
+
+      news.forEach(item => {
+        const dotClass = { negative: 'dot-negative', positive: 'dot-positive', neutral: 'dot-neutral' }[item.impact] || 'dot-neutral';
+        const impactLabel = { negative: 'Negative', positive: 'Positive', neutral: 'Neutral' }[item.impact] || 'Neutral';
+        const impactColor = { negative: 'text-red-400', positive: 'text-green-400', neutral: 'text-slate-400' }[item.impact] || 'text-slate-400';
+        const sourceTag = item.source ? `<span class="text-xs text-slate-500 ml-2">· ${item.source}</span>` : '';
+
+        container.insertAdjacentHTML('beforeend', `
+          <div class="border-b border-slate-700/50 pb-4 last:border-0 last:pb-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full flex-shrink-0 ${dotClass}"></span>
+              <span class="text-xs font-semibold ${impactColor}">${impactLabel}</span>
+              ${sourceTag}
+            </div>
+            <a href="${item.url}" target="_blank" rel="noopener" class="text-sm font-semibold text-slate-200 hover:text-blue-400 transition-colors leading-tight block mb-1">${item.title} ↗</a>
+            <p class="text-xs text-slate-500 leading-snug">${item.snippet}</p>
+          </div>
+        `);
+      });
+    }
+
+    // ─── RENDER FULL DASHBOARD ─────────────────────────────────
+    function renderDashboard(current, history) {
+      const band = getBand(current.score);
+      const prev = current.previous_score;
+      const delta = prev !== null ? current.score - prev : null;
+
+      // Header
+      document.getElementById('header-score').textContent = current.score + '/100';
+      document.getElementById('header-score').style.color = band.color;
+      const ts = new Date(current.timestamp);
+      document.getElementById('header-updated').textContent = 'Updated ' + ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+      // Gauge
+      buildGauge(current.score);
+
+      // Category badge
+      const badge = document.getElementById('category-badge');
+      badge.textContent = current.category;
+      badge.style.background = band.bg;
+      badge.style.color = band.color;
+
+      // Category label
+      document.getElementById('category-label').textContent = current.category;
+
+      // Delta
+      const arrowEl = document.getElementById('delta-arrow');
+      const textEl = document.getElementById('delta-text');
+      if (delta === null) {
+        arrowEl.textContent = '·'; arrowEl.className = 'text-xl font-black delta-flat';
+        textEl.textContent = current.delta_summary;
+      } else if (delta > 0) {
+        arrowEl.textContent = '↑'; arrowEl.className = 'text-xl font-black delta-up';
+        textEl.textContent = `+${delta} from last week (${prev} → ${current.score})`;
+      } else if (delta < 0) {
+        arrowEl.textContent = '↓'; arrowEl.className = 'text-xl font-black delta-down';
+        textEl.textContent = `${delta} from last week (${prev} → ${current.score})`;
+      } else {
+        arrowEl.textContent = '→'; arrowEl.className = 'text-xl font-black delta-flat';
+        textEl.textContent = `Unchanged from last week (${current.score})`;
+      }
+
+      // Sowell Insight
+      if (current.sowell_insight) {
+        document.getElementById('sowell-insight').textContent = '"' + current.sowell_insight + '"';
+      }
+
+      // Mini stats
+      document.getElementById('stat-previous').textContent = prev !== null ? prev : '—';
+      document.getElementById('stat-proj-2027').textContent = current.projections?.['2027'] ?? '—';
+      document.getElementById('stat-proj-2031').textContent = current.projections?.['2031'] ?? '—';
+
+      // Reasoning
+      document.getElementById('reasoning-text').textContent = current.reasoning;
+      document.getElementById('delta-summary').textContent = current.delta_summary;
+
+      // Categories
+      if (current.category_breakdown) renderCategories(current.category_breakdown);
+
+      // Factors
+      if (current.factors) renderFactors(current.factors);
+
+      // News
+      if (current.news) renderNews(current.news);
+
+      // Projections
+      document.getElementById('proj-2027').textContent = current.projections?.['2027'] ?? '—';
+      document.getElementById('proj-2029').textContent = current.projections?.['2029'] ?? '—';
+      document.getElementById('proj-2031').textContent = current.projections?.['2031'] ?? '—';
+
+      // Migration correlation
+      if (current.migration_correlation) {
+        document.getElementById('migration-correlation').textContent = current.migration_correlation;
+      }
+
+      // Sparkline
+      const fullHistory = [...(history || [])];
+      if (fullHistory.length > 1) buildSparkline(fullHistory.slice(-12));
+
+      // Show content
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('main-content').classList.remove('hidden');
+    }
+
+    // ─── LOAD DATA ─────────────────────────────────────────────
+    fetch('data.json?v=' + Date.now())
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to load data.json: ' + r.status);
+        return r.json();
+      })
+      .then(data => {
+        renderDashboard(data.current, data.history);
+      })
+      .catch(err => {
+        document.getElementById('loading-state').innerHTML = `
+          <div class="text-center text-red-400 py-20">
+            <p class="text-lg font-bold mb-2">Failed to load CVI data</p>
+            <p class="text-sm text-slate-500">${err.message}</p>
+            <p class="text-xs text-slate-600 mt-2">Make sure data.json exists and you're serving via HTTP (not file://)</p>
+          </div>`;
+      });
+  </script>
+
+</body>
+</html>
