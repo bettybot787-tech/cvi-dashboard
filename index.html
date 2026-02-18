@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>California Viability Index</title>
-  <meta name="description" content="A Sowell-inspired composite 0–100 gauge tracking California's fiscal sustainability, economic performance, affordability, and demographic incentives." />
+  <meta name="description" content="A Sowell-inspired composite 0-100 gauge tracking California's fiscal sustainability, economic performance, affordability, and demographic incentives." />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -49,13 +49,12 @@
     .gauge-canvas-container {
       position: relative;
       width: 100%;
-      /* Aspect ratio: canvas is a half-circle, so height ~55% of width */
     }
     .gauge-canvas-container canvas {
       width: 100% !important;
       height: auto !important;
     }
-    /* Central score overlay — positioned at bottom-center of the half-doughnut */
+    /* Central score overlay */
     .gauge-overlay {
       position: absolute;
       bottom: 2%;
@@ -101,6 +100,19 @@
       transition: width 1s ease;
     }
 
+    /* Mini progress bar for sub-metrics */
+    .mini-bar-track {
+      background: #334155;
+      border-radius: 9999px;
+      height: 6px;
+      overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 1s ease;
+    }
+
     /* Score delta badge */
     .delta-up   { color: #22c55e; }
     .delta-down { color: #ef4444; }
@@ -125,6 +137,13 @@
     /* Sparkline tooltip hide */
     .sparkline-container { position: relative; height: 80px; }
 
+    /* Details/summary styling */
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::marker { display: none; }
+    details[open] .chevron-icon { transform: rotate(180deg); }
+    .chevron-icon { transition: transform 0.2s ease; }
+
     /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
@@ -134,28 +153,24 @@
 
 <body class="min-h-screen text-slate-100 antialiased">
 
-  <!-- ═══════════════════════════════════════════════════════════
-       HEADER
-  ═══════════════════════════════════════════════════════════ -->
+  <!-- HEADER -->
   <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-black text-sm">CA</div>
         <div>
           <h1 class="text-sm font-bold text-white leading-tight">California Viability Index</h1>
-          <p class="text-xs text-slate-400 leading-tight">Sowell-inspired 0–100 structural health gauge</p>
+          <p class="text-xs text-slate-400 leading-tight">Sowell-inspired 0-100 structural health gauge</p>
         </div>
       </div>
       <div class="text-right">
-        <div id="header-score" class="text-lg font-black text-orange-400">—</div>
-        <div id="header-updated" class="text-xs text-slate-500">Loading…</div>
+        <div id="header-score" class="text-lg font-black text-orange-400">--</div>
+        <div id="header-updated" class="text-xs text-slate-500">Loading...</div>
       </div>
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       MAIN
-  ═══════════════════════════════════════════════════════════ -->
+  <!-- MAIN -->
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
 
     <!-- LOADING STATE -->
@@ -164,13 +179,13 @@
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
       </svg>
-      <p class="text-sm">Loading CVI data…</p>
+      <p class="text-sm">Loading CVI data...</p>
     </div>
 
     <!-- MAIN CONTENT (hidden until data loads) -->
     <div id="main-content" class="hidden space-y-8">
 
-      <!-- ── GAUGE + SCORE HERO ─────────────────────────────── -->
+      <!-- GAUGE + SCORE HERO -->
       <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 md:p-10">
         <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
 
@@ -180,18 +195,18 @@
               <canvas id="gaugeChart"></canvas>
               <!-- Score Overlay -->
               <div class="gauge-overlay score-animate">
-                <div id="gauge-score" class="text-6xl md:text-7xl font-black leading-none" style="color:#f97316">—</div>
+                <div id="gauge-score" class="text-6xl md:text-7xl font-black leading-none" style="color:#f97316">--</div>
                 <div class="text-slate-400 text-sm font-medium mt-1">out of 100</div>
               </div>
             </div>
 
             <!-- Band labels row -->
             <div class="band-labels mt-2 px-1">
-              <div class="band-label" style="background:#dc262622;color:#dc2626;">Leave Now<br/>0–25</div>
-              <div class="band-label" style="background:#f9731622;color:#f97316;">Consider<br/>26–45</div>
-              <div class="band-label" style="background:#eab30822;color:#eab308;">Neutral<br/>46–60</div>
-              <div class="band-label" style="background:#84cc1622;color:#84cc16;">Attractive<br/>61–80</div>
-              <div class="band-label" style="background:#22c55e22;color:#22c55e;">Move Here<br/>81–100</div>
+              <div class="band-label" style="background:#dc262622;color:#dc2626;">Leave Now<br/>0-25</div>
+              <div class="band-label" style="background:#f9731622;color:#f97316;">Consider<br/>26-45</div>
+              <div class="band-label" style="background:#eab30822;color:#eab308;">Neutral<br/>46-60</div>
+              <div class="band-label" style="background:#84cc1622;color:#84cc16;">Attractive<br/>61-80</div>
+              <div class="band-label" style="background:#22c55e22;color:#22c55e;">Move Here<br/>81-100</div>
             </div>
           </div>
 
@@ -199,14 +214,14 @@
           <div class="flex-1 text-center lg:text-left space-y-4">
 
             <div>
-              <div id="category-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-3" style="background:#f9731622;color:#f97316;">—</div>
-              <h2 id="category-label" class="text-3xl md:text-4xl font-black text-white leading-tight">Loading…</h2>
+              <div id="category-badge" class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-3" style="background:#f9731622;color:#f97316;">--</div>
+              <h2 id="category-label" class="text-3xl md:text-4xl font-black text-white leading-tight">Loading...</h2>
             </div>
 
             <!-- Delta -->
             <div id="delta-block" class="flex items-center justify-center lg:justify-start gap-2 text-sm">
-              <span id="delta-arrow" class="text-xl font-black delta-flat">→</span>
-              <span id="delta-text" class="text-slate-400">—</span>
+              <span id="delta-arrow" class="text-xl font-black delta-flat">-></span>
+              <span id="delta-text" class="text-slate-400">--</span>
             </div>
 
             <!-- Sowell Insight -->
@@ -215,15 +230,15 @@
             <!-- Mini stats row -->
             <div class="grid grid-cols-3 gap-3 mt-2">
               <div class="bg-slate-900/60 rounded-xl p-3 text-center">
-                <div id="stat-previous" class="text-xl font-bold text-slate-300">—</div>
+                <div id="stat-previous" class="text-xl font-bold text-slate-300">--</div>
                 <div class="text-xs text-slate-500 mt-0.5">Last Week</div>
               </div>
               <div class="bg-slate-900/60 rounded-xl p-3 text-center">
-                <div id="stat-proj-2027" class="text-xl font-bold text-slate-300">—</div>
+                <div id="stat-proj-2027" class="text-xl font-bold text-slate-300">--</div>
                 <div class="text-xs text-slate-500 mt-0.5">Proj. 2027</div>
               </div>
               <div class="bg-slate-900/60 rounded-xl p-3 text-center">
-                <div id="stat-proj-2031" class="text-xl font-bold text-slate-300">—</div>
+                <div id="stat-proj-2031" class="text-xl font-bold text-slate-300">--</div>
                 <div class="text-xs text-slate-500 mt-0.5">Proj. 2031</div>
               </div>
             </div>
@@ -240,20 +255,108 @@
         </div>
       </section>
 
-      <!-- ── REASONING ──────────────────────────────────────── -->
+      <!-- REASONING -->
       <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
-        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Analysis & Reasoning</h3>
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Analysis &amp; Reasoning</h3>
         <p id="reasoning-text" class="text-slate-300 leading-relaxed text-sm md:text-base"></p>
         <div id="delta-summary" class="mt-4 bg-slate-900/50 rounded-xl p-4 border border-slate-700/50 text-sm text-slate-400 italic"></div>
       </section>
 
-      <!-- ── CATEGORY BREAKDOWN ─────────────────────────────── -->
+      <!-- CATEGORY BREAKDOWN -->
       <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
         <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Category Breakdown</h3>
         <div id="category-breakdown" class="space-y-4"></div>
       </section>
 
-      <!-- ── TWO-COLUMN: FACTORS + NEWS ────────────────────── -->
+      <!-- SCORING METHODOLOGY (collapsible) -->
+      <section id="methodology-section" class="hidden">
+        <details class="bg-slate-800/40 border border-slate-700/50 rounded-2xl">
+          <summary class="p-6 flex items-center justify-between cursor-pointer select-none">
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Scoring Methodology</h3>
+            <svg class="chevron-icon w-5 h-5 text-slate-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-6 pb-6 space-y-6">
+
+            <!-- Composite Formula -->
+            <div>
+              <h4 class="text-sm font-semibold text-slate-300 mb-3">Composite Formula</h4>
+              <div class="bg-slate-900/80 border border-slate-700/30 rounded-xl p-4 font-mono text-xs text-slate-400 leading-relaxed overflow-x-auto">
+                <div class="text-slate-500 mb-2">CVI = Fiscal x 0.25 + Econ x 0.20 + Afford x 0.20 + Demo x 0.15 + QoL x 0.10 + Policy x 0.10</div>
+                <div id="methodology-formula-expanded" class="text-slate-300"></div>
+              </div>
+            </div>
+
+            <!-- Band Definitions -->
+            <div>
+              <h4 class="text-sm font-semibold text-slate-300 mb-3">Band Definitions</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-2">
+                  <span class="w-3 h-3 rounded-full flex-shrink-0" style="background:#dc2626;"></span>
+                  <div>
+                    <div class="text-xs font-bold" style="color:#dc2626;">Leave Now</div>
+                    <div class="text-xs text-slate-500">0-25</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-2">
+                  <span class="w-3 h-3 rounded-full flex-shrink-0" style="background:#f97316;"></span>
+                  <div>
+                    <div class="text-xs font-bold" style="color:#f97316;">Consider Leaving</div>
+                    <div class="text-xs text-slate-500">26-45</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-2">
+                  <span class="w-3 h-3 rounded-full flex-shrink-0" style="background:#eab308;"></span>
+                  <div>
+                    <div class="text-xs font-bold" style="color:#eab308;">Neutral / Monitor</div>
+                    <div class="text-xs text-slate-500">46-60</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-2">
+                  <span class="w-3 h-3 rounded-full flex-shrink-0" style="background:#84cc16;"></span>
+                  <div>
+                    <div class="text-xs font-bold" style="color:#84cc16;">Mildly Attractive</div>
+                    <div class="text-xs text-slate-500">61-80</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-2">
+                  <span class="w-3 h-3 rounded-full flex-shrink-0" style="background:#22c55e;"></span>
+                  <div>
+                    <div class="text-xs font-bold" style="color:#22c55e;">Move Here</div>
+                    <div class="text-xs text-slate-500">81-100</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Data Sources -->
+            <div>
+              <h4 class="text-sm font-semibold text-slate-300 mb-3">Data Sources</h4>
+              <div id="methodology-sources" class="bg-slate-900/60 rounded-xl overflow-hidden">
+                <table class="w-full text-xs">
+                  <thead>
+                    <tr class="border-b border-slate-700/50">
+                      <th class="text-left px-3 py-2 text-slate-500 font-semibold">Factor</th>
+                      <th class="text-left px-3 py-2 text-slate-500 font-semibold">Status</th>
+                      <th class="text-left px-3 py-2 text-slate-500 font-semibold">Source</th>
+                    </tr>
+                  </thead>
+                  <tbody id="methodology-sources-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Methodology Note -->
+            <div class="border-t border-slate-700/30 pt-4">
+              <p class="text-xs text-slate-500 leading-relaxed italic">Based on the CVI model -- a Thomas Sowell-inspired composite indicator focusing on incentives, data, and trade-offs. Each metric is normalized 0-100 (100 = best U.S. benchmark) and weighted by category importance.</p>
+            </div>
+
+          </div>
+        </details>
+      </section>
+
+      <!-- TWO-COLUMN: FACTORS + NEWS -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         <!-- Key Factors -->
@@ -270,7 +373,7 @@
 
       </div>
 
-      <!-- ── PROJECTIONS ─────────────────────────────────────── -->
+      <!-- PROJECTIONS -->
       <section class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
         <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Projections &amp; Migration Correlation</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -278,15 +381,15 @@
             <p class="text-sm font-semibold text-slate-400 mb-3">Score Trajectory (Under Current Trends)</p>
             <div class="grid grid-cols-3 gap-3">
               <div class="bg-slate-900/60 rounded-xl p-4 text-center">
-                <div id="proj-2027" class="text-2xl font-black text-red-400">—</div>
+                <div id="proj-2027" class="text-2xl font-black text-red-400">--</div>
                 <div class="text-xs text-slate-500 mt-1">2027</div>
               </div>
               <div class="bg-slate-900/60 rounded-xl p-4 text-center">
-                <div id="proj-2029" class="text-2xl font-black text-red-500">—</div>
+                <div id="proj-2029" class="text-2xl font-black text-red-500">--</div>
                 <div class="text-xs text-slate-500 mt-1">2029</div>
               </div>
               <div class="bg-slate-900/60 rounded-xl p-4 text-center">
-                <div id="proj-2031" class="text-2xl font-black text-red-600">—</div>
+                <div id="proj-2031" class="text-2xl font-black text-red-600">--</div>
                 <div class="text-xs text-slate-500 mt-1">2031</div>
               </div>
             </div>
@@ -303,20 +406,16 @@
     </div><!-- /main-content -->
   </main>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FOOTER
-  ═══════════════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
   <footer class="border-t border-slate-800 mt-8 py-6">
     <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-600 space-y-1">
-      <p>California Viability Index — Sowell-inspired composite indicator. Not financial or political advice. Data-driven incentive analysis only.</p>
-      <p>Sources: BLS · U.S. Census · CA DOF / LAO · BEA · Tax Foundation · CalPERS · HUD · PPIC · FRED</p>
-      <p>Updated automatically every Monday via GitHub Actions. Open source — <a href="https://github.com/bettybot787-tech/cvi-dashboard" class="underline hover:text-slate-400 transition-colors">View on GitHub</a></p>
+      <p>California Viability Index -- Sowell-inspired composite indicator. Not financial or political advice. Data-driven incentive analysis only.</p>
+      <p>Sources: BLS . U.S. Census . CA DOF / LAO . BEA . Tax Foundation . CalPERS . HUD . PPIC . FRED</p>
+      <p>Updated automatically every Monday via GitHub Actions. Open source -- <a href="https://github.com/bettybot787-tech/cvi-dashboard" class="underline hover:text-slate-400 transition-colors">View on GitHub</a></p>
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       JAVASCRIPT
-  ═══════════════════════════════════════════════════════════ -->
+  <!-- JAVASCRIPT -->
   <script>
     // ─── BAND DEFINITIONS ──────────────────────────────────────
     const BANDS = [
@@ -346,12 +445,9 @@
         const cx = (chartArea.left + chartArea.right) / 2;
         const cy = (chartArea.bottom + chartArea.top) / 2 + (chartArea.bottom - chartArea.top) * 0.22;
 
-        // The half-arc spans from -180° to 0° (left to right)
-        // score=0 → -180° (left), score=100 → 0° (right)
-        const angleRad = (Math.PI) * (score / 100); // 0 → 0, 100 → π
-        const needleAngle = Math.PI - angleRad; // convert: 0→π (left), 100→0 (right)
+        const angleRad = (Math.PI) * (score / 100);
+        const needleAngle = Math.PI - angleRad;
 
-        // Needle length: ~42% of chart area width
         const radius = Math.min(chartArea.right - chartArea.left, chartArea.bottom - chartArea.top) * 0.42;
         const needleLength = radius * 0.85;
         const needleWidth = 3;
@@ -416,7 +512,6 @@
         type: 'doughnut',
         data: {
           datasets: [{
-            // 5 segments proportional to band widths: 25, 20, 15, 20, 20
             data: [25, 20, 15, 20, 20],
             backgroundColor: ['#dc2626', '#f97316', '#eab308', '#84cc16', '#22c55e'],
             borderWidth: 0,
@@ -501,6 +596,13 @@
       });
     }
 
+    // ─── HELPER: score color ────────────────────────────────────
+    function scoreColor(score) {
+      if (score >= 65) return '#22c55e';
+      if (score >= 40) return '#eab308';
+      return '#ef4444';
+    }
+
     // ─── RENDER CATEGORY BREAKDOWN ─────────────────────────────
     function renderCategories(breakdown) {
       const container = document.getElementById('category-breakdown');
@@ -509,27 +611,68 @@
       breakdown.forEach(cat => {
         const pct = cat.weight * 100;
         const score = cat.sub_score;
-        const color = score >= 60 ? '#22c55e' : score >= 40 ? '#eab308' : '#ef4444';
-        const trendIcon = { improving: '↑', deteriorating: '↓', stable: '→' }[cat.trend] || '→';
+        const color = scoreColor(score);
+        const trendIcon = { improving: '\u2191', deteriorating: '\u2193', stable: '\u2192' }[cat.trend] || '\u2192';
         const trendColor = { improving: 'text-green-400', deteriorating: 'text-red-400', stable: 'text-slate-400' }[cat.trend] || 'text-slate-400';
+
+        // Weighted contribution display
+        const hasWeightedContrib = typeof cat.weighted_contribution === 'number';
+        const maxPossible = (cat.weight * 100).toFixed(1);
+        const weightedContribText = hasWeightedContrib
+          ? ` <span class="text-slate-400 font-normal">\u2192 ${cat.weighted_contribution.toFixed(1)} pts of ${maxPossible}</span>`
+          : ` <span class="text-xs text-slate-500">contributes ${Math.round(score * cat.weight)} pts</span>`;
+
+        // Sub-metrics rendering
+        let subMetricsHtml = '';
+        if (cat.sub_metrics && Array.isArray(cat.sub_metrics) && cat.sub_metrics.length > 0) {
+          const metricRows = cat.sub_metrics.map((sm, idx) => {
+            const isLast = idx === cat.sub_metrics.length - 1;
+            const prefix = isLast ? '\u2514\u2500' : '\u251C\u2500';
+            const smColor = scoreColor(sm.score);
+            const smWeightPct = typeof sm.weight_in_cat === 'number' ? Math.round(sm.weight_in_cat * 100) : '';
+            const smWeightLabel = smWeightPct ? `(${smWeightPct}%)` : '';
+            const smFormula = sm.formula
+              ? `<span class="bg-slate-900/80 border border-slate-700/30 rounded px-2 py-0.5 font-mono text-xs text-slate-400">${escapeHtml(sm.formula)}</span>`
+              : '';
+
+            return `
+              <div class="flex items-center gap-2 text-xs py-1">
+                <span class="text-slate-600 font-mono flex-shrink-0">${prefix}</span>
+                <span class="text-slate-400 flex-shrink-0">${escapeHtml(sm.name)} <span class="text-slate-500">${smWeightLabel}</span></span>
+                <div class="flex-1 mini-bar-track max-w-[120px]">
+                  <div class="mini-bar-fill" style="width:${sm.score}%;background:${smColor};"></div>
+                </div>
+                <span class="font-bold flex-shrink-0" style="color:${smColor}">${sm.score}</span>
+                ${smFormula}
+              </div>
+            `;
+          }).join('');
+
+          subMetricsHtml = `
+            <div class="ml-4 border-l border-slate-700/30 pl-3 mt-2">
+              ${metricRows}
+            </div>
+          `;
+        }
 
         container.insertAdjacentHTML('beforeend', `
           <div class="space-y-2">
             <div class="flex items-center justify-between text-sm">
               <div class="flex items-center gap-2">
-                <span class="font-semibold text-slate-200">${cat.name}</span>
+                <span class="font-semibold text-slate-200">${escapeHtml(cat.name)}</span>
                 <span class="text-xs text-slate-500 font-medium">(${pct}%)</span>
                 <span class="text-xs font-bold ${trendColor}">${trendIcon}</span>
               </div>
               <div class="flex items-center gap-2">
                 <span class="font-bold" style="color:${color}">${score}/100</span>
-                <span class="text-xs text-slate-500">contributes ${Math.round(score * cat.weight)} pts</span>
+                ${weightedContribText}
               </div>
             </div>
             <div class="progress-bar-track">
               <div class="progress-bar-fill" style="width:${score}%;background:${color};"></div>
             </div>
-            <p class="text-xs text-slate-500 leading-relaxed">${cat.details}</p>
+            <p class="text-xs text-slate-500 leading-relaxed">${escapeHtml(cat.details)}</p>
+            ${subMetricsHtml}
           </div>
         `);
       });
@@ -541,24 +684,106 @@
       container.innerHTML = '';
 
       factors.forEach(f => {
-        const isPos = f.contribution > 0;
-        const contribColor = isPos ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10';
-        const contribSign = isPos ? '+' : '';
+        // Detect whether this is the new enhanced schema or legacy
+        const hasNewSchema = typeof f.raw_score === 'number';
 
-        container.insertAdjacentHTML('beforeend', `
-          <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex-1 min-w-0">
-                <p class="font-semibold text-slate-200 text-sm leading-tight">${f.name}</p>
-                <p class="text-xs text-slate-400 mt-1 leading-snug">${f.value}</p>
+        if (hasNewSchema) {
+          // --- NEW ENHANCED FACTOR CARD ---
+          const rawScore = f.raw_score;
+          const barColor = scoreColor(rawScore);
+
+          // Direction badge
+          let dirBadge = '';
+          if (f.direction === 'negative') {
+            dirBadge = '<span class="text-xs font-bold px-2 py-0.5 rounded-full text-red-400 bg-red-400/10">\u2193 Negative</span>';
+          } else if (f.direction === 'positive') {
+            dirBadge = '<span class="text-xs font-bold px-2 py-0.5 rounded-full text-green-400 bg-green-400/10">\u2191 Positive</span>';
+          } else {
+            dirBadge = '<span class="text-xs font-bold px-2 py-0.5 rounded-full text-yellow-400 bg-yellow-400/10">\u2192 Neutral</span>';
+          }
+
+          // Live / stale indicator
+          const liveDotColor = f.is_live ? 'bg-green-500' : 'bg-amber-500';
+          const liveLabel = f.is_live ? 'Live' : 'Fallback';
+
+          // Formula pill
+          const formulaPill = f.formula
+            ? `<div class="mt-2"><span class="bg-slate-900/80 border border-slate-700/30 rounded px-2 py-0.5 font-mono text-xs text-slate-400 inline-block">${escapeHtml(f.formula)}</span></div>`
+            : '';
+
+          // Score bar
+          const scoreBar = `
+            <div class="flex items-center gap-2 mt-2">
+              <div class="flex-1" style="height:6px;background:#334155;border-radius:9999px;overflow:hidden;">
+                <div style="width:${rawScore}%;height:100%;background:${barColor};border-radius:9999px;transition:width 1s ease;"></div>
               </div>
-              <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${contribColor}">${contribSign}${f.contribution} pts</span>
-                <a href="${f.source_url}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline">Source ↗</a>
+              <span class="text-xs font-bold flex-shrink-0" style="color:${barColor}">${rawScore}/100</span>
+            </div>
+          `;
+
+          // Data date
+          const dataDateHtml = f.data_date
+            ? `<span class="text-xs text-slate-500">${escapeHtml(f.data_date)}</span>`
+            : '';
+
+          // Benchmark
+          const benchmarkHtml = f.benchmark
+            ? `<p class="text-xs text-slate-600 italic mt-1">${escapeHtml(f.benchmark)}</p>`
+            : '';
+
+          container.insertAdjacentHTML('beforeend', `
+            <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-slate-200 text-sm leading-tight">${escapeHtml(f.name)}</p>
+                  <p class="text-xs text-slate-400 mt-1 leading-snug">${escapeHtml(f.value)}</p>
+                  ${formulaPill}
+                  ${scoreBar}
+                  ${benchmarkHtml}
+                </div>
+                <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+                  ${dirBadge}
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full ${liveDotColor} inline-block"></span>
+                    <span class="text-xs text-slate-500">${liveLabel}</span>
+                  </div>
+                  ${dataDateHtml ? '<div>' + dataDateHtml + '</div>' : ''}
+                  <a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline">Source \u2197</a>
+                </div>
               </div>
             </div>
-          </div>
-        `);
+          `);
+        } else {
+          // --- LEGACY FACTOR CARD (backward-compatible) ---
+          const isPos = f.contribution > 0;
+          const isZero = f.contribution === 0;
+          let contribColor, contribSign;
+          if (isPos) {
+            contribColor = 'text-green-400 bg-green-400/10';
+            contribSign = '+';
+          } else if (isZero) {
+            contribColor = 'text-yellow-400 bg-yellow-400/10';
+            contribSign = '';
+          } else {
+            contribColor = 'text-red-400 bg-red-400/10';
+            contribSign = '';
+          }
+
+          container.insertAdjacentHTML('beforeend', `
+            <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-slate-200 text-sm leading-tight">${escapeHtml(f.name)}</p>
+                  <p class="text-xs text-slate-400 mt-1 leading-snug">${escapeHtml(f.value)}</p>
+                </div>
+                <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                  <span class="text-xs font-bold px-2 py-0.5 rounded-full ${contribColor}">${contribSign}${f.contribution} pts</span>
+                  <a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline">Source \u2197</a>
+                </div>
+              </div>
+            </div>
+          `);
+        }
       });
     }
 
@@ -571,7 +796,7 @@
         const dotClass = { negative: 'dot-negative', positive: 'dot-positive', neutral: 'dot-neutral' }[item.impact] || 'dot-neutral';
         const impactLabel = { negative: 'Negative', positive: 'Positive', neutral: 'Neutral' }[item.impact] || 'Neutral';
         const impactColor = { negative: 'text-red-400', positive: 'text-green-400', neutral: 'text-slate-400' }[item.impact] || 'text-slate-400';
-        const sourceTag = item.source ? `<span class="text-xs text-slate-500 ml-2">· ${item.source}</span>` : '';
+        const sourceTag = item.source ? `<span class="text-xs text-slate-500 ml-2">\u00B7 ${escapeHtml(item.source)}</span>` : '';
 
         container.insertAdjacentHTML('beforeend', `
           <div class="border-b border-slate-700/50 pb-4 last:border-0 last:pb-0">
@@ -580,11 +805,106 @@
               <span class="text-xs font-semibold ${impactColor}">${impactLabel}</span>
               ${sourceTag}
             </div>
-            <a href="${item.url}" target="_blank" rel="noopener" class="text-sm font-semibold text-slate-200 hover:text-blue-400 transition-colors leading-tight block mb-1">${item.title} ↗</a>
-            <p class="text-xs text-slate-500 leading-snug">${item.snippet}</p>
+            <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener" class="text-sm font-semibold text-slate-200 hover:text-blue-400 transition-colors leading-tight block mb-1">${escapeHtml(item.title)} \u2197</a>
+            <p class="text-xs text-slate-500 leading-snug">${escapeHtml(item.snippet)}</p>
           </div>
         `);
       });
+    }
+
+    // ─── RENDER METHODOLOGY SECTION ─────────────────────────────
+    function renderMethodology(current) {
+      const section = document.getElementById('methodology-section');
+      section.classList.remove('hidden');
+
+      // Build expanded formula from category_breakdown
+      const breakdown = current.category_breakdown || [];
+      const formulaEl = document.getElementById('methodology-formula-expanded');
+
+      if (breakdown.length > 0) {
+        // Category short names
+        const shortNames = ['Fiscal', 'Econ', 'Afford', 'Demo', 'QoL', 'Policy'];
+
+        // Line 1: CVI = score x weight + ...
+        const line1Parts = breakdown.map((cat, i) => {
+          const name = shortNames[i] || cat.name.split(' ')[0];
+          return `${cat.sub_score} x ${cat.weight.toFixed(2)}`;
+        });
+        const line1 = 'CVI = ' + line1Parts.join(' + ');
+
+        // Line 2: = weighted values
+        const weightedValues = breakdown.map(cat => {
+          const wc = typeof cat.weighted_contribution === 'number'
+            ? cat.weighted_contribution
+            : parseFloat((cat.sub_score * cat.weight).toFixed(1));
+          return wc.toFixed(1);
+        });
+        const line2 = '    = ' + weightedValues.join(' + ');
+
+        // Line 3: = total -> rounded
+        const total = weightedValues.reduce((sum, v) => sum + parseFloat(v), 0);
+        const rounded = Math.round(total);
+        const line3 = '    = ' + total.toFixed(1) + ' \u2192 ' + rounded;
+
+        formulaEl.innerHTML =
+          '<div>' + escapeHtml(line1) + '</div>' +
+          '<div>' + escapeHtml(line2) + '</div>' +
+          '<div class="text-orange-400 font-bold">' + escapeHtml(line3) + '</div>';
+      }
+
+      // Data sources table
+      const tbody = document.getElementById('methodology-sources-body');
+      tbody.innerHTML = '';
+
+      if (current.factors && current.factors.length > 0) {
+        current.factors.forEach(f => {
+          const hasNewSchema = typeof f.raw_score === 'number';
+          let statusDot, statusLabel;
+
+          if (hasNewSchema) {
+            statusDot = f.is_live
+              ? '<span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>'
+              : '<span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>';
+            statusLabel = f.is_live ? 'Live' : 'Fallback';
+          } else {
+            statusDot = '<span class="w-2 h-2 rounded-full bg-slate-500 inline-block"></span>';
+            statusLabel = 'Legacy';
+          }
+
+          tbody.insertAdjacentHTML('beforeend', `
+            <tr class="border-b border-slate-700/30 last:border-0">
+              <td class="px-3 py-2 text-slate-300">${escapeHtml(f.name)}</td>
+              <td class="px-3 py-2">
+                <div class="flex items-center gap-1.5">
+                  ${statusDot}
+                  <span class="text-slate-400">${statusLabel}</span>
+                </div>
+              </td>
+              <td class="px-3 py-2">
+                <a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline truncate block max-w-[200px]">${escapeHtml(extractDomain(f.source_url))}</a>
+              </td>
+            </tr>
+          `);
+        });
+      }
+    }
+
+    // ─── UTILITY: extract domain from URL ───────────────────────
+    function extractDomain(url) {
+      try {
+        const u = new URL(url);
+        return u.hostname.replace(/^www\./, '');
+      } catch {
+        return url;
+      }
+    }
+
+    // ─── UTILITY: escape HTML ───────────────────────────────────
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
     }
 
     // ─── RENDER FULL DASHBOARD ─────────────────────────────────
@@ -615,28 +935,28 @@
       const arrowEl = document.getElementById('delta-arrow');
       const textEl = document.getElementById('delta-text');
       if (delta === null) {
-        arrowEl.textContent = '·'; arrowEl.className = 'text-xl font-black delta-flat';
+        arrowEl.textContent = '\u00B7'; arrowEl.className = 'text-xl font-black delta-flat';
         textEl.textContent = current.delta_summary;
       } else if (delta > 0) {
-        arrowEl.textContent = '↑'; arrowEl.className = 'text-xl font-black delta-up';
-        textEl.textContent = `+${delta} from last week (${prev} → ${current.score})`;
+        arrowEl.textContent = '\u2191'; arrowEl.className = 'text-xl font-black delta-up';
+        textEl.textContent = '+' + delta + ' from last week (' + prev + ' \u2192 ' + current.score + ')';
       } else if (delta < 0) {
-        arrowEl.textContent = '↓'; arrowEl.className = 'text-xl font-black delta-down';
-        textEl.textContent = `${delta} from last week (${prev} → ${current.score})`;
+        arrowEl.textContent = '\u2193'; arrowEl.className = 'text-xl font-black delta-down';
+        textEl.textContent = delta + ' from last week (' + prev + ' \u2192 ' + current.score + ')';
       } else {
-        arrowEl.textContent = '→'; arrowEl.className = 'text-xl font-black delta-flat';
-        textEl.textContent = `Unchanged from last week (${current.score})`;
+        arrowEl.textContent = '\u2192'; arrowEl.className = 'text-xl font-black delta-flat';
+        textEl.textContent = 'Unchanged from last week (' + current.score + ')';
       }
 
       // Sowell Insight
       if (current.sowell_insight) {
-        document.getElementById('sowell-insight').textContent = '"' + current.sowell_insight + '"';
+        document.getElementById('sowell-insight').textContent = '\u201C' + current.sowell_insight + '\u201D';
       }
 
       // Mini stats
-      document.getElementById('stat-previous').textContent = prev !== null ? prev : '—';
-      document.getElementById('stat-proj-2027').textContent = current.projections?.['2027'] ?? '—';
-      document.getElementById('stat-proj-2031').textContent = current.projections?.['2031'] ?? '—';
+      document.getElementById('stat-previous').textContent = prev !== null ? prev : '--';
+      document.getElementById('stat-proj-2027').textContent = current.projections?.['2027'] ?? '--';
+      document.getElementById('stat-proj-2031').textContent = current.projections?.['2031'] ?? '--';
 
       // Reasoning
       document.getElementById('reasoning-text').textContent = current.reasoning;
@@ -645,6 +965,9 @@
       // Categories
       if (current.category_breakdown) renderCategories(current.category_breakdown);
 
+      // Methodology (always render after categories)
+      renderMethodology(current);
+
       // Factors
       if (current.factors) renderFactors(current.factors);
 
@@ -652,17 +975,17 @@
       if (current.news) renderNews(current.news);
 
       // Projections
-      document.getElementById('proj-2027').textContent = current.projections?.['2027'] ?? '—';
-      document.getElementById('proj-2029').textContent = current.projections?.['2029'] ?? '—';
-      document.getElementById('proj-2031').textContent = current.projections?.['2031'] ?? '—';
+      document.getElementById('proj-2027').textContent = current.projections?.['2027'] ?? '--';
+      document.getElementById('proj-2029').textContent = current.projections?.['2029'] ?? '--';
+      document.getElementById('proj-2031').textContent = current.projections?.['2031'] ?? '--';
 
       // Migration correlation
       if (current.migration_correlation) {
         document.getElementById('migration-correlation').textContent = current.migration_correlation;
       }
 
-      // Sparkline
-      const fullHistory = [...(history || [])];
+      // Sparkline — include current reading at end
+      const fullHistory = [...(history || []), current];
       if (fullHistory.length > 1) buildSparkline(fullHistory.slice(-12));
 
       // Show content
