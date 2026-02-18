@@ -148,6 +148,104 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+
+    /* ── Progressive Disclosure: Info Icon + Tooltip ── */
+    .info-anchor {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .info-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #334155;
+      color: #64748b;
+      font-size: 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+      line-height: 1;
+    }
+    .info-btn:hover, .info-anchor.open .info-btn {
+      background: #475569;
+      color: #cbd5e1;
+    }
+    .info-tooltip {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 100;
+      width: 270px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+    .info-anchor.open .info-tooltip { display: block; }
+    .info-tooltip .tooltip-formula {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 0.68rem;
+      color: #7dd3fc;
+      margin: 6px 0;
+      word-break: break-all;
+    }
+    .info-tooltip .tooltip-section {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #334155;
+    }
+
+    /* ── Traffic-light dots ── */
+    .tl-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    .tl-dot.red    { background: #ef4444; }
+    .tl-dot.yellow { background: #eab308; }
+    .tl-dot.green  { background: #22c55e; }
+
+    /* ── Category expand toggle ── */
+    .cat-details-btn {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #475569;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cat-details-btn:hover { color: #94a3b8; background: #1e293b; }
+    .cat-detail-panel { display: none; }
+    .cat-detail-panel.open { display: block; }
+
+    /* ── Reasoning truncation ── */
+    .reasoning-clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .reasoning-clamp.expanded { display: block; overflow: visible; }
+    .read-more-btn { background: none; border: none; color: #64748b; font-size: 0.75rem; cursor: pointer; padding: 4px 0; display: inline-flex; align-items: center; gap: 3px; }
+    .read-more-btn:hover { color: #94a3b8; }
   </style>
 </head>
 
@@ -603,76 +701,159 @@
       return '#ef4444';
     }
 
+    // ─── HELPER: traffic-light dot class ───────────────────────
+    function tlDotClass(score) {
+      if (score >= 65) return 'green';
+      if (score >= 40) return 'yellow';
+      return 'red';
+    }
+
+    // ─── HELPER: plain-English sub-metric status label ─────────
+    function subMetricLabel(score) {
+      if (score >= 80) return 'strong';
+      if (score >= 65) return 'solid';
+      if (score >= 50) return 'moderate';
+      if (score >= 40) return 'under pressure';
+      if (score >= 25) return 'well below average';
+      if (score >= 10) return 'critically stressed';
+      return 'near worst case';
+    }
+
+    // ─── HELPER: friendly benchmark sentence ───────────────────
+    // Takes the raw benchmark string (e.g. "100 = CA equals U.S.; 80+ = gap <1pt")
+    // and returns a short human-readable sentence for the tooltip.
+    function friendlyBenchmark(f) {
+      const b = f.benchmark || '';
+      // Find the "100 = ..." anchor and rephrase
+      const m = b.match(/100\s*=\s*([^;]+)/i);
+      const ideal = m ? m[1].trim().toLowerCase() : null;
+      const score = f.raw_score;
+      let qualitative;
+      if (score >= 80) qualitative = 'performing well';
+      else if (score >= 65) qualitative = 'above average';
+      else if (score >= 50) qualitative = 'near average';
+      else if (score >= 35) qualitative = 'below average';
+      else qualitative = 'near the bottom';
+
+      if (ideal) {
+        return `A perfect score means ${ideal}. California is currently ${qualitative} on this measure.`;
+      }
+      return `California is currently ${qualitative} on this measure.`;
+    }
+
+    // ─── HELPER: strip "Fixed proxy: " prefix from value text ──
+    function cleanValue(value) {
+      return (value || '').replace(/^Fixed proxy:\s*/i, '').replace(/^Fixed:\s*/i, '');
+    }
+
+    // ─── PROGRESSIVE DISCLOSURE: info tooltip toggle ───────────
+    function initInfoTooltips() {
+      document.addEventListener('click', function(e) {
+        // Close all open tooltips when clicking outside
+        if (!e.target.closest('.info-anchor')) {
+          document.querySelectorAll('.info-anchor.open').forEach(el => el.classList.remove('open'));
+        }
+      });
+    }
+
+    function toggleInfoAnchor(el) {
+      const isOpen = el.classList.contains('open');
+      document.querySelectorAll('.info-anchor.open').forEach(a => a.classList.remove('open'));
+      if (!isOpen) el.classList.add('open');
+    }
+
     // ─── RENDER CATEGORY BREAKDOWN ─────────────────────────────
     function renderCategories(breakdown) {
       const container = document.getElementById('category-breakdown');
       container.innerHTML = '';
 
-      breakdown.forEach(cat => {
-        const pct = cat.weight * 100;
+      breakdown.forEach((cat, catIdx) => {
         const score = cat.sub_score;
         const color = scoreColor(score);
         const trendIcon = { improving: '\u2191', deteriorating: '\u2193', stable: '\u2192' }[cat.trend] || '\u2192';
         const trendColor = { improving: 'text-green-400', deteriorating: 'text-red-400', stable: 'text-slate-400' }[cat.trend] || 'text-slate-400';
+        const panelId = 'cat-panel-' + catIdx;
 
-        // Weighted contribution display
+        // Traffic-light dot rows (top layer — no numbers, no formulas)
+        let tlRowsHtml = '';
+        if (cat.sub_metrics && Array.isArray(cat.sub_metrics) && cat.sub_metrics.length > 0) {
+          tlRowsHtml = cat.sub_metrics.map(sm => {
+            const dotCls = tlDotClass(sm.score);
+            const statusLabel = subMetricLabel(sm.score);
+            return `
+              <div class="flex items-center gap-2.5 py-1">
+                <span class="tl-dot ${dotCls}"></span>
+                <span class="text-xs text-slate-400">${escapeHtml(sm.name)}</span>
+                <span class="text-xs text-slate-600 italic">${statusLabel}</span>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Expanded detail rows (revealed on click — raw scores + formulas)
         const hasWeightedContrib = typeof cat.weighted_contribution === 'number';
         const maxPossible = (cat.weight * 100).toFixed(1);
-        const weightedContribText = hasWeightedContrib
-          ? ` <span class="text-slate-400 font-normal">\u2192 ${cat.weighted_contribution.toFixed(1)} pts of ${maxPossible}</span>`
-          : ` <span class="text-xs text-slate-500">contributes ${Math.round(score * cat.weight)} pts</span>`;
+        const contribLine = hasWeightedContrib
+          ? `<p class="text-xs text-slate-600 mt-3 pt-2 border-t border-slate-700/30">This category contributes <span class="text-slate-400 font-semibold">${cat.weighted_contribution.toFixed(1)}</span> of <span class="text-slate-400">${maxPossible}</span> possible points to the total CVI score (weight: ${Math.round(cat.weight * 100)}%).</p>`
+          : '';
 
-        // Sub-metrics rendering
-        let subMetricsHtml = '';
+        let detailRowsHtml = '';
         if (cat.sub_metrics && Array.isArray(cat.sub_metrics) && cat.sub_metrics.length > 0) {
-          const metricRows = cat.sub_metrics.map((sm, idx) => {
+          detailRowsHtml = cat.sub_metrics.map((sm, idx) => {
             const isLast = idx === cat.sub_metrics.length - 1;
             const prefix = isLast ? '\u2514\u2500' : '\u251C\u2500';
             const smColor = scoreColor(sm.score);
             const smWeightPct = typeof sm.weight_in_cat === 'number' ? Math.round(sm.weight_in_cat * 100) : '';
-            const smWeightLabel = smWeightPct ? `(${smWeightPct}%)` : '';
-            const smFormula = sm.formula
-              ? `<span class="bg-slate-900/80 border border-slate-700/30 rounded px-2 py-0.5 font-mono text-xs text-slate-400">${escapeHtml(sm.formula)}</span>`
+            const formulaHtml = sm.formula
+              ? `<div class="font-mono text-slate-500 text-[0.65rem] mt-0.5 pl-5">${escapeHtml(sm.formula)}</div>`
               : '';
-
             return `
-              <div class="flex items-center gap-2 text-xs py-1">
-                <span class="text-slate-600 font-mono flex-shrink-0">${prefix}</span>
-                <span class="text-slate-400 flex-shrink-0">${escapeHtml(sm.name)} <span class="text-slate-500">${smWeightLabel}</span></span>
-                <div class="flex-1 mini-bar-track max-w-[120px]">
-                  <div class="mini-bar-fill" style="width:${sm.score}%;background:${smColor};"></div>
+              <div class="py-1">
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="text-slate-600 font-mono flex-shrink-0">${prefix}</span>
+                  <span class="text-slate-400 flex-shrink-0">${escapeHtml(sm.name)}${smWeightPct ? ` <span class="text-slate-600">(${smWeightPct}%)</span>` : ''}</span>
+                  <div class="flex-1 mini-bar-track max-w-[80px]">
+                    <div class="mini-bar-fill" style="width:${sm.score}%;background:${smColor};"></div>
+                  </div>
+                  <span class="font-bold flex-shrink-0" style="color:${smColor}">${sm.score}/100</span>
                 </div>
-                <span class="font-bold flex-shrink-0" style="color:${smColor}">${sm.score}</span>
-                ${smFormula}
+                ${formulaHtml}
               </div>
             `;
           }).join('');
-
-          subMetricsHtml = `
-            <div class="ml-4 border-l border-slate-700/30 pl-3 mt-2">
-              ${metricRows}
-            </div>
-          `;
         }
 
         container.insertAdjacentHTML('beforeend', `
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center gap-2">
-                <span class="font-semibold text-slate-200">${escapeHtml(cat.name)}</span>
-                <span class="text-xs text-slate-500 font-medium">(${pct}%)</span>
-                <span class="text-xs font-bold ${trendColor}">${trendIcon}</span>
+          <div class="rounded-xl bg-slate-900/30 border border-slate-700/40 p-4 space-y-2">
+
+            <!-- Header row: name · score · trend · details toggle -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="font-semibold text-slate-200 text-sm truncate">${escapeHtml(cat.name)}</span>
+                <span class="text-xs font-bold ${trendColor} flex-shrink-0">${trendIcon}</span>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="font-bold" style="color:${color}">${score}/100</span>
-                ${weightedContribText}
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="font-bold text-sm" style="color:${color}">${score}</span>
+                <button class="cat-details-btn" onclick="(function(btn){var p=document.getElementById('${panelId}');p.classList.toggle('open');btn.textContent=p.classList.contains('open')?'\u25be Details':'\u25b8 Details';})(this)">\u25b8 Details</button>
               </div>
             </div>
+
+            <!-- Progress bar -->
             <div class="progress-bar-track">
               <div class="progress-bar-fill" style="width:${score}%;background:${color};"></div>
             </div>
-            <p class="text-xs text-slate-500 leading-relaxed">${escapeHtml(cat.details)}</p>
-            ${subMetricsHtml}
+
+            <!-- Traffic-light sub-metric dots (default visible) -->
+            ${tlRowsHtml ? `<div class="space-y-0 mt-1">${tlRowsHtml}</div>` : ''}
+
+            <!-- Expanded detail panel (hidden by default) -->
+            <div id="${panelId}" class="cat-detail-panel">
+              <div class="border-t border-slate-700/30 pt-3 mt-1 space-y-0">
+                ${detailRowsHtml}
+              </div>
+              ${contribLine}
+            </div>
+
           </div>
         `);
       });
@@ -683,14 +864,13 @@
       const container = document.getElementById('factors-list');
       container.innerHTML = '';
 
-      factors.forEach(f => {
-        // Detect whether this is the new enhanced schema or legacy
+      factors.forEach((f, fi) => {
         const hasNewSchema = typeof f.raw_score === 'number';
 
         if (hasNewSchema) {
-          // --- NEW ENHANCED FACTOR CARD ---
           const rawScore = f.raw_score;
           const barColor = scoreColor(rawScore);
+          const anchorId = 'finfo-' + fi;
 
           // Direction badge
           let dirBadge = '';
@@ -702,73 +882,67 @@
             dirBadge = '<span class="text-xs font-bold px-2 py-0.5 rounded-full text-yellow-400 bg-yellow-400/10">\u2192 Neutral</span>';
           }
 
-          // Live / stale indicator
+          // Live / fallback dot (top layer — just dot + word)
           const liveDotColor = f.is_live ? 'bg-green-500' : 'bg-amber-500';
           const liveLabel = f.is_live ? 'Live' : 'Fallback';
 
-          // Formula pill
-          const formulaPill = f.formula
-            ? `<div class="mt-2"><span class="bg-slate-900/80 border border-slate-700/30 rounded px-2 py-0.5 font-mono text-xs text-slate-400 inline-block">${escapeHtml(f.formula)}</span></div>`
+          // Tooltip content (formula, benchmark, date, source)
+          const formulaHtml = f.formula
+            ? `<div class="tooltip-formula">${escapeHtml(f.formula)}</div>`
+            : '';
+          const benchText = f.benchmark ? friendlyBenchmark(f) : '';
+          const benchHtml = benchText
+            ? `<p class="tooltip-section">${escapeHtml(benchText)}</p>`
+            : '';
+          const dateHtml = f.data_date
+            ? `<p class="tooltip-section text-slate-500">Data period: ${escapeHtml(f.data_date)}</p>`
+            : '';
+          const sourceHtml = f.source_url
+            ? `<p class="${f.data_date ? '' : 'tooltip-section'}"><a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-blue-400 underline hover:text-blue-300">View source \u2197</a></p>`
             : '';
 
-          // Score bar
-          const scoreBar = `
-            <div class="flex items-center gap-2 mt-2">
-              <div class="flex-1" style="height:6px;background:#334155;border-radius:9999px;overflow:hidden;">
-                <div style="width:${rawScore}%;height:100%;background:${barColor};border-radius:9999px;transition:width 1s ease;"></div>
-              </div>
-              <span class="text-xs font-bold flex-shrink-0" style="color:${barColor}">${rawScore}/100</span>
-            </div>
-          `;
-
-          // Data date
-          const dataDateHtml = f.data_date
-            ? `<span class="text-xs text-slate-500">${escapeHtml(f.data_date)}</span>`
+          const tooltipHtml = (formulaHtml || benchHtml || dateHtml || sourceHtml)
+            ? `<div class="info-tooltip">${formulaHtml}${benchHtml}${dateHtml}${sourceHtml}</div>`
             : '';
 
-          // Benchmark
-          const benchmarkHtml = f.benchmark
-            ? `<p class="text-xs text-slate-600 italic mt-1">${escapeHtml(f.benchmark)}</p>`
-            : '';
+          // Clean display value — strip "Fixed proxy:" prefix
+          const displayValue = cleanValue(f.value);
 
           container.insertAdjacentHTML('beforeend', `
-            <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4">
-              <div class="flex items-start justify-between gap-3">
+            <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 relative">
+              <div class="flex items-start gap-3">
+
+                <!-- Left: name, value, score bar -->
                 <div class="flex-1 min-w-0">
                   <p class="font-semibold text-slate-200 text-sm leading-tight">${escapeHtml(f.name)}</p>
-                  <p class="text-xs text-slate-400 mt-1 leading-snug">${escapeHtml(f.value)}</p>
-                  ${formulaPill}
-                  ${scoreBar}
-                  ${benchmarkHtml}
+                  <p class="text-xs text-slate-400 mt-1 leading-snug">${escapeHtml(displayValue)}</p>
+                  <div class="flex items-center gap-2 mt-2">
+                    <div class="flex-1" style="height:6px;background:#334155;border-radius:9999px;overflow:hidden;">
+                      <div style="width:${rawScore}%;height:100%;background:${barColor};border-radius:9999px;transition:width 1s ease;"></div>
+                    </div>
+                    <span class="text-xs font-bold flex-shrink-0" style="color:${barColor}">${rawScore}/100</span>
+                  </div>
                 </div>
+
+                <!-- Right: direction badge, live dot, info icon -->
                 <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
                   ${dirBadge}
                   <div class="flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full ${liveDotColor} inline-block"></span>
                     <span class="text-xs text-slate-500">${liveLabel}</span>
                   </div>
-                  ${dataDateHtml ? '<div>' + dataDateHtml + '</div>' : ''}
-                  <a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline">Source \u2197</a>
+                  ${tooltipHtml ? `
+                  <div class="info-anchor" id="${anchorId}" onclick="toggleInfoAnchor(this)">
+                    <button class="info-btn" aria-label="Show details">i</button>
+                    ${tooltipHtml}
+                  </div>` : ''}
                 </div>
+
               </div>
             </div>
           `);
         } else {
-          // --- LEGACY FACTOR CARD (backward-compatible) ---
-          const isPos = f.contribution > 0;
-          const isZero = f.contribution === 0;
-          let contribColor, contribSign;
-          if (isPos) {
-            contribColor = 'text-green-400 bg-green-400/10';
-            contribSign = '+';
-          } else if (isZero) {
-            contribColor = 'text-yellow-400 bg-yellow-400/10';
-            contribSign = '';
-          } else {
-            contribColor = 'text-red-400 bg-red-400/10';
-            contribSign = '';
-          }
-
+          // Legacy fallback card
           container.insertAdjacentHTML('beforeend', `
             <div class="factor-card bg-slate-900/60 border border-slate-700/50 rounded-xl p-4">
               <div class="flex items-start justify-between gap-3">
@@ -776,10 +950,7 @@
                   <p class="font-semibold text-slate-200 text-sm leading-tight">${escapeHtml(f.name)}</p>
                   <p class="text-xs text-slate-400 mt-1 leading-snug">${escapeHtml(f.value)}</p>
                 </div>
-                <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                  <span class="text-xs font-bold px-2 py-0.5 rounded-full ${contribColor}">${contribSign}${f.contribution} pts</span>
-                  <a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline">Source \u2197</a>
-                </div>
+                <a href="${escapeHtml(f.source_url)}" target="_blank" rel="noopener" class="text-xs text-slate-500 hover:text-blue-400 transition-colors underline flex-shrink-0">Source \u2197</a>
               </div>
             </div>
           `);
@@ -958,8 +1129,26 @@
       document.getElementById('stat-proj-2027').textContent = current.projections?.['2027'] ?? '--';
       document.getElementById('stat-proj-2031').textContent = current.projections?.['2031'] ?? '--';
 
-      // Reasoning
-      document.getElementById('reasoning-text').textContent = current.reasoning;
+      // Reasoning — truncated with "Read more" expand
+      (function() {
+        const el = document.getElementById('reasoning-text');
+        const text = current.reasoning || '';
+        const LIMIT = 200;
+        if (text.length <= LIMIT) {
+          el.textContent = text;
+        } else {
+          el.classList.add('reasoning-clamp');
+          el.textContent = text;
+          const btn = document.createElement('button');
+          btn.className = 'read-more-btn';
+          btn.textContent = 'Read more \u2193';
+          btn.onclick = function() {
+            el.classList.toggle('expanded');
+            btn.textContent = el.classList.contains('expanded') ? 'Read less \u2191' : 'Read more \u2193';
+          };
+          el.parentNode.insertBefore(btn, el.nextSibling);
+        }
+      })();
       document.getElementById('delta-summary').textContent = current.delta_summary;
 
       // Categories
@@ -1001,6 +1190,7 @@
       })
       .then(data => {
         renderDashboard(data.current, data.history);
+        initInfoTooltips();
       })
       .catch(err => {
         document.getElementById('loading-state').innerHTML = `
