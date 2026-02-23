@@ -1,17 +1,17 @@
 {
   "current": {
-    "score": 33,
+    "score": 34,
     "category": "Strongly Consider Leaving",
     "color": "#f97316",
-    "timestamp": "2026-02-18T06:34:28Z",
-    "reasoning": "California's Viability Index stands at 33/100 \u2014 'Strongly Consider Leaving'. Fiscal sustainability (sub-score 37/100, weight 25%) reflects structural budget imbalances and pension underfunding that compound annually. Affordability (sub-score 17/100, weight 20%) is severely impaired by median home prices nearly double the national average and the nation's highest top marginal income tax rate of 13.3%. Economic performance (sub-score 62/100) is partly buoyed by tech-sector GDP growth, but unemployment remains 1.2 points above the national rate. Quality of life and safety (sub-score 41/100) is weighed down by homelessness rates roughly 2.4x the national per-capita average. Policy and incentive risks (sub-score 17/100) remain high given California's 48th-of-50 business climate ranking and unresolved CEQA/AB5 burdens.",
-    "delta_summary": "Score unchanged from last week (33/100). No material data shifts detected.",
+    "timestamp": "2026-02-23T05:20:34Z",
+    "reasoning": "California's Viability Index stands at 34/100 \u2014 'Strongly Consider Leaving'. Fiscal sustainability (sub-score 37/100, weight 25%) reflects structural budget imbalances and pension underfunding that compound annually. Affordability (sub-score 17/100, weight 20%) is severely impaired by median home prices nearly double the national average and the nation's highest top marginal income tax rate of 13.3%. Economic performance (sub-score 66/100) is partly buoyed by tech-sector GDP growth, but unemployment remains 1.2 points above the national rate. Quality of life and safety (sub-score 41/100) is weighed down by homelessness rates roughly 2.4x the national per-capita average. Policy and incentive risks (sub-score 17/100) remain high given California's 48th-of-50 business climate ranking and unresolved CEQA/AB5 burdens.",
+    "delta_summary": "Score improved by 1 point week-over-week (33 -> 34). Positive data revision or improving trend in one or more categories.",
     "previous_score": 33,
     "sowell_insight": "When a state's top earners emigrate faster than its general population, the incentive structure is revealing itself arithmetically: the cost of staying exceeds the cost of leaving for those who can choose.",
     "projections": {
-      "2027": 27,
-      "2029": 21,
-      "2031": 15
+      "2027": 28,
+      "2029": 22,
+      "2031": 16
     },
     "migration_correlation": "CVI has tracked approximately 84% of variance in net domestic outflows since 2021, as tax burden and housing cost differentials remain the dominant outflow drivers.",
     "category_breakdown": [
@@ -46,9 +46,9 @@
       {
         "name": "Economic Performance",
         "weight": 0.2,
-        "sub_score": 62,
-        "weighted_contribution": 12.4,
-        "details": "Unemployment formula: 100-(CA-US)x20 = 76; GDP growth differential score: 54; Job creation proxy: 38. Blended: 62.",
+        "sub_score": 66,
+        "weighted_contribution": 13.2,
+        "details": "Unemployment formula: 100-(CA-US)x20 = 76; GDP growth differential score: 69; Job creation proxy: 38. Blended: 66.",
         "trend": "stable",
         "sub_metrics": [
           {
@@ -60,8 +60,8 @@
           {
             "name": "GDP Growth",
             "weight_in_cat": 0.3,
-            "score": 54,
-            "formula": "60 + (3.2 - 4.4) x 5 = 54"
+            "score": 69,
+            "formula": "60 + (3.2 - 1.4) x 5 = 69"
           },
           {
             "name": "Job Creation",
@@ -239,12 +239,12 @@
       },
       {
         "name": "GDP Growth vs. National",
-        "value": "CA ~3.2% vs. U.S. ~4.4% \u2014 tech sector drives slight premium",
-        "raw_score": 54,
-        "weighted_pts": 3.2,
+        "value": "CA ~3.2% vs. U.S. ~1.4% \u2014 tech sector drives slight premium",
+        "raw_score": 69,
+        "weighted_pts": 4.1,
         "max_possible_pts": 6.0,
-        "direction": "neutral",
-        "formula": "60 + (3.2 - 4.4) x 5 = 54",
+        "direction": "positive",
+        "formula": "60 + (3.2 - 1.4) x 5 = 69",
         "benchmark": "60 = CA matches U.S.; 70+ = CA outpaces by 2+pts; <50 = CA lags",
         "source_url": "https://www.bea.gov/data/gdp/gdp-state",
         "data_date": "",
@@ -422,17 +422,17 @@
     ],
     "news": [
       {
-        "title": "Fiscal analyst to Gavin Newsom: Rough budget waters ahead - CalMatters",
-        "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE93MmZDV2RxUjZUb3hBOGRvMnVmc09JU3F5YzF6bUo1cE9KZWFDcl9sRFotMjYzb3FKc0dIVEVRQmNEcDhkYkE3cEMtVHlfUlljX0xSREZvelZpS2VoOFBRM0gzNF80M2pRbV9yUHBRZmIwQldyMUtjNlJtNA?oc=5",
-        "snippet": "Fiscal analyst to Gavin Newsom: Rough budget waters ahead\u00a0\u00a0CalMatters",
+        "title": "The 2026-27 Budget: California's Fiscal Outlook - Legislative Analyst\u2019s Office (.gov)",
+        "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9UQm9DZkRZWDhyQ0JZdU45aDlIcHVSZmh0NkM0UDJWUS1kdGdqSTVReGJMTTVMbl85aWFib0RFa1ltV0xjT3JmcW9sd1VUQlEwTkZ6b2dR?oc=5",
+        "snippet": "The 2026-27 Budget: California's Fiscal Outlook\u00a0\u00a0Legislative Analyst\u2019s Office (.gov)",
         "pubdate": "Wed, 19 Nov 2025 08:00:00 GMT",
         "source": "Google News",
         "impact": "neutral"
       },
       {
-        "title": "The 2026-27 Budget: California's Fiscal Outlook - Legislative Analyst\u2019s Office (.gov)",
-        "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9UQm9DZkRZWDhyQ0JZdU45aDlIcHVSZmh0NkM0UDJWUS1kdGdqSTVReGJMTTVMbl85aWFib0RFa1ltV0xjT3JmcW9sd1VUQlEwTkZ6b2dR?oc=5",
-        "snippet": "The 2026-27 Budget: California's Fiscal Outlook\u00a0\u00a0Legislative Analyst\u2019s Office (.gov)",
+        "title": "Fiscal analyst to Gavin Newsom: Rough budget waters ahead - CalMatters",
+        "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE93MmZDV2RxUjZUb3hBOGRvMnVmc09JU3F5YzF6bUo1cE9KZWFDcl9sRFotMjYzb3FKc0dIVEVRQmNEcDhkYkE3cEMtVHlfUlljX0xSREZvelZpS2VoOFBRM0gzNF80M2pRbV9yUHBRZmIwQldyMUtjNlJtNA?oc=5",
+        "snippet": "Fiscal analyst to Gavin Newsom: Rough budget waters ahead\u00a0\u00a0CalMatters",
         "pubdate": "Wed, 19 Nov 2025 08:00:00 GMT",
         "source": "Google News",
         "impact": "neutral"
@@ -462,12 +462,12 @@
         "impact": "neutral"
       },
       {
-        "title": "Hidden in Trump\u2019s spending package: A surprise boost to California\u2019s affordable housing - CalMatters",
-        "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE11VW5DOS1tYnRNMEpYMjJPS3VKbTMwN0dLcE5BdE1zVlhVcHY5TEZqb0owN2tGNnJwZkZ6OTByeWxFaEI2MWJSOE5TNHhhU1p3aG1MdTFqZ00yQWh4bHR1QTBEVlJqWlpPVVFyc3BDakhkU2JBYnc?oc=5",
-        "snippet": "Hidden in Trump\u2019s spending package: A surprise boost to California\u2019s affordable housing\u00a0\u00a0CalMatters",
-        "pubdate": "Tue, 12 Aug 2025 07:00:00 GMT",
+        "title": "Tax-defaulted parcels could be used for affordable housing - University of California, Riverside",
+        "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPRUlkcTNjT01Pb1hSZ1J6MmwzLVVRVW9lZTdHY0tScVlKeWZvdkctZ0otNDNWQmltWXRMU2V2Y3NxMEhpbjdZQ0t3NWFmR1d2akxaSHBZNXZIeHZRbUFqd25BQTEwMFBNRTRzUUFSNTJxVkwzSkVkcHUybWNyaGJXY1VLOTVJekJUamk4eFRXUG51QTY2US0wa1lQbw?oc=5",
+        "snippet": "Tax-defaulted parcels could be used for affordable housing\u00a0\u00a0University of California, Riverside",
+        "pubdate": "Wed, 17 Dec 2025 08:00:00 GMT",
         "source": "Google News",
-        "impact": "positive"
+        "impact": "neutral"
       },
       {
         "title": "California\u2019s Population - Public Policy Institute of California",
@@ -492,7 +492,7 @@
       "ca_unemp": 5.5,
       "us_unemp": 4.3,
       "ca_gdp_growth": 3.21,
-      "us_gdp_pct": 4.4,
+      "us_gdp_pct": 1.4,
       "home_price_ratio": 1.9,
       "top_tax_rate": 13.3,
       "coli": 140,
@@ -1753,6 +1753,494 @@
           "source_url": "https://dof.ca.gov/forecasting/demographics/estimates/",
           "data_date": "",
           "is_live": false
+        },
+        {
+          "name": "Homelessness",
+          "value": "CA has ~28% of U.S. homeless at 12% of population (2.4x overrepresented)",
+          "raw_score": 38,
+          "weighted_pts": 1.9,
+          "max_possible_pts": 5.0,
+          "direction": "negative",
+          "formula": "80 - (2.4 - 1.0) x 30 = 38",
+          "benchmark": "80 = proportional to population; 50 = 2x overrepresented; <30 = 2.7x+",
+          "source_url": "https://www.huduser.gov/portal/sites/default/files/pdf/2023-AHAR-Part-1.pdf",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Crime Index",
+          "value": "CA violent crime rate above national average; property crime elevated in major metros",
+          "raw_score": 40,
+          "weighted_pts": 1.2,
+          "max_possible_pts": 3.0,
+          "direction": "neutral",
+          "formula": "Fixed proxy: 40 (above-average violent/property crime)",
+          "benchmark": "70+ = below national avg; 50 = at national avg; <40 = above avg",
+          "source_url": "https://oag.ca.gov/statistics/crimes-clearances",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Infrastructure",
+          "value": "Above-average roads/transit spending; persistent maintenance backlog and CEQA delays",
+          "raw_score": 52,
+          "weighted_pts": 1.0,
+          "max_possible_pts": 2.0,
+          "direction": "neutral",
+          "formula": "Fixed proxy: 52 (above-avg spending, maintenance backlog)",
+          "benchmark": "70+ = well-maintained; 50 = average; <40 = crumbling",
+          "source_url": "https://lao.ca.gov/Publications/Report/4914",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Business Tax Climate Rank",
+          "value": "Ranked 48/50 states (Tax Foundation 2024 State Business Tax Climate Index)",
+          "raw_score": 6,
+          "weighted_pts": 0.2,
+          "max_possible_pts": 4.0,
+          "direction": "negative",
+          "formula": "(51 - 48) x (100/49) = 6",
+          "benchmark": "100 = rank 1; 50 = rank 26; 6 = rank 48; 2 = rank 50",
+          "source_url": "https://taxfoundation.org/research/all/state/2024-state-business-tax-climate-index/",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Regulatory Burden",
+          "value": "CEQA litigation costs, AB5 contractor restrictions, expanding environmental mandates \u2014 among highest in U.S.",
+          "raw_score": 20,
+          "weighted_pts": 0.7,
+          "max_possible_pts": 3.5,
+          "direction": "negative",
+          "formula": "Fixed proxy: 20 (CEQA, AB5, environmental mandates)",
+          "benchmark": "70+ = light regulation; 50 = moderate; <25 = very heavy burden",
+          "source_url": "https://lao.ca.gov/Publications/Report/4907",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Recent Policy Trajectory",
+          "value": "No structural pension reform; Prop 1 mental health bond ($6.38B) approved 2024; incremental housing reforms partially positive",
+          "raw_score": 30,
+          "weighted_pts": 0.8,
+          "max_possible_pts": 2.5,
+          "direction": "negative",
+          "formula": "Fixed proxy: 30 (no structural reform, incremental housing)",
+          "benchmark": "70+ = meaningful structural reform; 50 = status quo; <30 = deteriorating",
+          "source_url": "https://lao.ca.gov/publications/report/4942",
+          "data_date": "",
+          "is_live": false
+        }
+      ],
+      "news": [
+        {
+          "title": "Fiscal analyst to Gavin Newsom: Rough budget waters ahead - CalMatters",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE93MmZDV2RxUjZUb3hBOGRvMnVmc09JU3F5YzF6bUo1cE9KZWFDcl9sRFotMjYzb3FKc0dIVEVRQmNEcDhkYkE3cEMtVHlfUlljX0xSREZvelZpS2VoOFBRM0gzNF80M2pRbV9yUHBRZmIwQldyMUtjNlJtNA?oc=5",
+          "snippet": "Fiscal analyst to Gavin Newsom: Rough budget waters ahead\u00a0\u00a0CalMatters",
+          "pubdate": "Wed, 19 Nov 2025 08:00:00 GMT",
+          "source": "Google News",
+          "impact": "neutral"
+        },
+        {
+          "title": "The 2026-27 Budget: California's Fiscal Outlook - Legislative Analyst\u2019s Office (.gov)",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9UQm9DZkRZWDhyQ0JZdU45aDlIcHVSZmh0NkM0UDJWUS1kdGdqSTVReGJMTTVMbl85aWFib0RFa1ltV0xjT3JmcW9sd1VUQlEwTkZ6b2dR?oc=5",
+          "snippet": "The 2026-27 Budget: California's Fiscal Outlook\u00a0\u00a0Legislative Analyst\u2019s Office (.gov)",
+          "pubdate": "Wed, 19 Nov 2025 08:00:00 GMT",
+          "source": "Google News",
+          "impact": "neutral"
+        },
+        {
+          "title": "California\u2019s Legislative Analyst Talks Shop about a Tough State Budget - Public Policy Institute of California",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQRlU2R2ZxV1JUaGVQakdFSU5iNjdnUkdRbWpkbFlWcUtzOHR6U2dMbnNsVktOTmxYbGtremNfR0stM1IyaXFXMzZCb1lUZG9qWnFzSk94aVJOOEJabXdtRWJ3SDk5MUhXM0E0QkM4bFZrVWpMa3lZZ3dnb0tucmIxeXZ5ZW05a1JLcWhQbXdXeC1QVTFuVzJwU2t1UkQ?oc=5",
+          "snippet": "California\u2019s Legislative Analyst Talks Shop about a Tough State Budget\u00a0\u00a0Public Policy Institute of California",
+          "pubdate": "Tue, 16 Dec 2025 08:00:00 GMT",
+          "source": "Google News",
+          "impact": "neutral"
+        },
+        {
+          "title": "Governor Newsom builds on this year\u2019s historic housing reforms, signs legislation to accelerate housing and affordability - California State Portal | CA.gov",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPRDluc1pJZmVVNVhfOGpQVW45THlNZ0xFcVlGY2dtbHhkQks2ZjRXY09ueXhPSUFuVnhjS1JBUURWQ0ZqRTJ1cG83VjNKeTZhY19OclNMQ19NV3ZUSjZZQThycmFiVE1IR180dThlWjUwTGxlWHZscGVwRVotX3p0cjBxNmVmS012NGp2VjFMREZLUzhQSVJINl9WS2N2RVBNbk5pSGkxN1lnWlE5MVFNOVo1bF9CZWdTVHZXWFhGT0F5RTZQU3FuWi1GSURfOWw2YmpuODJDby15TGpiTjJZZFZ0QlVaRlROc3c?oc=5",
+          "snippet": "Governor Newsom builds on this year\u2019s historic housing reforms, signs legislation to accelerate housing and affordability\u00a0\u00a0California State Portal | CA.gov",
+          "pubdate": "Fri, 10 Oct 2025 07:00:00 GMT",
+          "source": "Google News",
+          "impact": "positive"
+        },
+        {
+          "title": "Santa Cruz Measure C tax for affordable housing grows slim majority - Santa Cruz Local",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNUjV2MHRUaTBTZjhFVjhucExqaG1FQzUyZTFLNjR2S1EyYkswS3p3dlR2ZW9XaHFycUJGSnZtaDlRQWRaa3VNM1dMUFEtUXlmMHpDWjhkZ0V0ODhZTFBQd2tGd1B1b0pQSFlnck9ia0VnWnJtSk9IckFhV29VOUdJU0UtZFV2aWV3VVJTWGZhSERfZ1ZVR0NRbzZXdmh6eUNHck8wakFkWF9GU0RxbldOMno2S0g5cUNBclVZWW4wOEs?oc=5",
+          "snippet": "Santa Cruz Measure C tax for affordable housing grows slim majority\u00a0\u00a0Santa Cruz Local",
+          "pubdate": "Tue, 04 Nov 2025 08:00:00 GMT",
+          "source": "Google News",
+          "impact": "neutral"
+        },
+        {
+          "title": "Hidden in Trump\u2019s spending package: A surprise boost to California\u2019s affordable housing - CalMatters",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE11VW5DOS1tYnRNMEpYMjJPS3VKbTMwN0dLcE5BdE1zVlhVcHY5TEZqb0owN2tGNnJwZkZ6OTByeWxFaEI2MWJSOE5TNHhhU1p3aG1MdTFqZ00yQWh4bHR1QTBEVlJqWlpPVVFyc3BDakhkU2JBYnc?oc=5",
+          "snippet": "Hidden in Trump\u2019s spending package: A surprise boost to California\u2019s affordable housing\u00a0\u00a0CalMatters",
+          "pubdate": "Tue, 12 Aug 2025 07:00:00 GMT",
+          "source": "Google News",
+          "impact": "positive"
+        },
+        {
+          "title": "California\u2019s Population - Public Policy Institute of California",
+          "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBub1BuOHFIWUlSZE5iSVFHemFIbXI5Tm1rSG1LWW9MQWQybUlJb21wWHVXMzc0a05zREV6alNhdXd2UVBYei00Q2hOSlNRbFdicmdhc0J3T3h5WjExaEtjU19UN3BkLUE?oc=5",
+          "snippet": "California\u2019s Population\u00a0\u00a0Public Policy Institute of California",
+          "pubdate": "Thu, 29 Jan 2026 08:00:00 GMT",
+          "source": "Google News",
+          "impact": "neutral"
+        },
+        {
+          "title": "California exodus continues in 2025 - The Malibu Times",
+          "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5xQTdrRWUtYVVPZGhRQTB3QnBEM3IxN1E4ZlJOUFZ1RlY0cTJkQXhPenAzdkIzLUNEQV9CeXJsRTlGNXRvV1VNRmJ4cnk3M2VFTmRUVDVneXhQMnZqZWV5TVJ3SXYyUTlYeERN?oc=5",
+          "snippet": "California exodus continues in 2025\u00a0\u00a0The Malibu Times",
+          "pubdate": "Sun, 18 Jan 2026 08:00:00 GMT",
+          "source": "Google News",
+          "impact": "negative"
+        }
+      ]
+    },
+    {
+      "score": 33,
+      "category": "Strongly Consider Leaving",
+      "color": "#f97316",
+      "timestamp": "2026-02-18T06:34:28Z",
+      "reasoning": "California's Viability Index stands at 33/100 \u2014 'Strongly Consider Leaving'. Fiscal sustainability (sub-score 37/100, weight 25%) reflects structural budget imbalances and pension underfunding that compound annually. Affordability (sub-score 17/100, weight 20%) is severely impaired by median home prices nearly double the national average and the nation's highest top marginal income tax rate of 13.3%. Economic performance (sub-score 62/100) is partly buoyed by tech-sector GDP growth, but unemployment remains 1.2 points above the national rate. Quality of life and safety (sub-score 41/100) is weighed down by homelessness rates roughly 2.4x the national per-capita average. Policy and incentive risks (sub-score 17/100) remain high given California's 48th-of-50 business climate ranking and unresolved CEQA/AB5 burdens.",
+      "delta_summary": "Score unchanged from last week (33/100). No material data shifts detected.",
+      "previous_score": 33,
+      "sowell_insight": "When a state's top earners emigrate faster than its general population, the incentive structure is revealing itself arithmetically: the cost of staying exceeds the cost of leaving for those who can choose.",
+      "projections": {
+        "2027": 27,
+        "2029": 21,
+        "2031": 15
+      },
+      "migration_correlation": "CVI has tracked approximately 84% of variance in net domestic outflows since 2021, as tax burden and housing cost differentials remain the dominant outflow drivers.",
+      "category_breakdown": [
+        {
+          "name": "Fiscal Sustainability",
+          "weight": 0.25,
+          "sub_score": 37,
+          "weighted_contribution": 9.2,
+          "details": "Budget deficit: $68B (score 2); CalPERS funded: 72% (score 72); Debt proxy: 45. Blended fiscal sub-score: 37.",
+          "trend": "deteriorating",
+          "sub_metrics": [
+            {
+              "name": "Budget Deficit",
+              "weight_in_cat": 0.4,
+              "score": 2,
+              "formula": "clamp(70 - 68 * 1.0) = 2"
+            },
+            {
+              "name": "CalPERS Funded Ratio",
+              "weight_in_cat": 0.35,
+              "score": 72,
+              "formula": "clamp(72) = 72"
+            },
+            {
+              "name": "State Debt Burden",
+              "weight_in_cat": 0.25,
+              "score": 45,
+              "formula": "Fixed proxy: 45 (Aa2/AA rating, high per-capita debt)"
+            }
+          ]
+        },
+        {
+          "name": "Economic Performance",
+          "weight": 0.2,
+          "sub_score": 62,
+          "weighted_contribution": 12.4,
+          "details": "Unemployment formula: 100-(CA-US)x20 = 76; GDP growth differential score: 54; Job creation proxy: 38. Blended: 62.",
+          "trend": "stable",
+          "sub_metrics": [
+            {
+              "name": "Unemployment Gap",
+              "weight_in_cat": 0.5,
+              "score": 76,
+              "formula": "100 - (5.5 - 4.3) x 20 = 76"
+            },
+            {
+              "name": "GDP Growth",
+              "weight_in_cat": 0.3,
+              "score": 54,
+              "formula": "60 + (3.2 - 4.4) x 5 = 54"
+            },
+            {
+              "name": "Job Creation",
+              "weight_in_cat": 0.2,
+              "score": 38,
+              "formula": "50 - (5.5 - 4.3) x 10 = 38"
+            }
+          ]
+        },
+        {
+          "name": "Affordability",
+          "weight": 0.2,
+          "sub_score": 17,
+          "weighted_contribution": 3.4,
+          "details": "Home price ratio vs. U.S.: 1.91x (score 16); Top income tax 13.3% (score 7); COLI 140 (score 28). Blended: 17.",
+          "trend": "deteriorating",
+          "sub_metrics": [
+            {
+              "name": "Home Price Premium",
+              "weight_in_cat": 0.5,
+              "score": 16,
+              "formula": "70 - (1.91 - 1.0) x 60 = 16"
+            },
+            {
+              "name": "Top Income Tax Rate",
+              "weight_in_cat": 0.25,
+              "score": 7,
+              "formula": "100 - 13.3 x 7.0 = 7"
+            },
+            {
+              "name": "Cost of Living Index",
+              "weight_in_cat": 0.25,
+              "score": 28,
+              "formula": "100 - (140 - 100) x 1.8 = 28"
+            }
+          ]
+        },
+        {
+          "name": "Demographic Trends",
+          "weight": 0.15,
+          "sub_score": 14,
+          "weighted_contribution": 2.1,
+          "details": "Net migration rate -5.1/1K -> score 0; High-earner outflow confirmed (score 30); Pop trend score 45. Blended: 14.",
+          "trend": "deteriorating",
+          "sub_metrics": [
+            {
+              "name": "Net Domestic Migration",
+              "weight_in_cat": 0.6,
+              "score": 0,
+              "formula": "50 + (-5.1 x 15) = 0"
+            },
+            {
+              "name": "High-Earner Outflow",
+              "weight_in_cat": 0.25,
+              "score": 30,
+              "formula": "40 - 10 = 30"
+            },
+            {
+              "name": "Population Trend",
+              "weight_in_cat": 0.15,
+              "score": 45,
+              "formula": "55 + (mig/100K)*5 = 45"
+            }
+          ]
+        },
+        {
+          "name": "Quality of Life & Safety",
+          "weight": 0.1,
+          "sub_score": 41,
+          "weighted_contribution": 4.1,
+          "details": "Homelessness 2.4x national share (score 38); Crime score 40; Infrastructure 52. Blended: 41.",
+          "trend": "stable",
+          "sub_metrics": [
+            {
+              "name": "Homelessness",
+              "weight_in_cat": 0.5,
+              "score": 38,
+              "formula": "80 - (2.4 - 1.0) x 30 = 38"
+            },
+            {
+              "name": "Crime Index",
+              "weight_in_cat": 0.3,
+              "score": 40,
+              "formula": "Fixed proxy: 40 (above-average violent/property crime)"
+            },
+            {
+              "name": "Infrastructure",
+              "weight_in_cat": 0.2,
+              "score": 52,
+              "formula": "Fixed proxy: 52 (above-avg spending, maintenance backlog)"
+            }
+          ]
+        },
+        {
+          "name": "Policy & Incentive Risks",
+          "weight": 0.1,
+          "sub_score": 17,
+          "weighted_contribution": 1.7,
+          "details": "Biz climate rank 48/50 (score 6); Regulatory burden score 20; Policy trajectory 30. Blended: 17.",
+          "trend": "deteriorating",
+          "sub_metrics": [
+            {
+              "name": "Business Tax Climate",
+              "weight_in_cat": 0.4,
+              "score": 6,
+              "formula": "(51 - 48) x (100/49) = 6"
+            },
+            {
+              "name": "Regulatory Burden",
+              "weight_in_cat": 0.35,
+              "score": 20,
+              "formula": "Fixed proxy: 20 (CEQA, AB5, environmental mandates)"
+            },
+            {
+              "name": "Policy Trajectory",
+              "weight_in_cat": 0.25,
+              "score": 30,
+              "formula": "Fixed proxy: 30 (no structural reform, incremental housing)"
+            }
+          ]
+        }
+      ],
+      "factors": [
+        {
+          "name": "State Budget Deficit",
+          "value": "$68B projected shortfall",
+          "raw_score": 2,
+          "weighted_pts": 0.2,
+          "max_possible_pts": 10.0,
+          "direction": "negative",
+          "formula": "clamp(70 - 68 * 1.0) = 2",
+          "benchmark": "70 = balanced budget; 40 = $30B deficit; 0 = $70B+ deficit",
+          "source_url": "https://lao.ca.gov/budgetoutlook",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "CalPERS Funded Ratio",
+          "value": "72% funded (~$300B+ unfunded liability)",
+          "raw_score": 72,
+          "weighted_pts": 6.3,
+          "max_possible_pts": 8.8,
+          "direction": "positive",
+          "formula": "clamp(72) = 72",
+          "benchmark": "100 = fully funded; 80+ = healthy; 72 = structurally underfunded",
+          "source_url": "https://www.calpers.ca.gov/page/investments/asset-classes/funded-status",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "State Debt Burden",
+          "value": "CA general obligation bonds rated Aa2/AA; per-capita debt among highest in U.S.",
+          "raw_score": 45,
+          "weighted_pts": 2.8,
+          "max_possible_pts": 6.2,
+          "direction": "neutral",
+          "formula": "Fixed proxy: 45 (Aa2/AA rating, high per-capita debt)",
+          "benchmark": "80+ = low debt, AAA; 50 = moderate; <40 = high burden",
+          "source_url": "https://lao.ca.gov/Publications/Report/4888",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Unemployment Gap",
+          "value": "CA 5.5% vs. U.S. 4.3% (+1.2 pts above national)",
+          "raw_score": 76,
+          "weighted_pts": 7.6,
+          "max_possible_pts": 10.0,
+          "direction": "positive",
+          "formula": "100 - (5.5 - 4.3) x 20 = 76",
+          "benchmark": "100 = CA equals U.S. rate; 80+ = gap <1pt; <60 = gap >2pts",
+          "source_url": "https://www.bls.gov/web/laus/laumstrk.htm",
+          "data_date": "2025-12",
+          "is_live": true
+        },
+        {
+          "name": "GDP Growth vs. National",
+          "value": "CA ~3.2% vs. U.S. ~4.4% \u2014 tech sector drives slight premium",
+          "raw_score": 54,
+          "weighted_pts": 3.2,
+          "max_possible_pts": 6.0,
+          "direction": "neutral",
+          "formula": "60 + (3.2 - 4.4) x 5 = 54",
+          "benchmark": "60 = CA matches U.S.; 70+ = CA outpaces by 2+pts; <50 = CA lags",
+          "source_url": "https://www.bea.gov/data/gdp/gdp-state",
+          "data_date": "",
+          "is_live": true
+        },
+        {
+          "name": "Job Creation Rate",
+          "value": "CA nonfarm payrolls growing slower than national pace; elevated unemployment persists",
+          "raw_score": 38,
+          "weighted_pts": 1.5,
+          "max_possible_pts": 4.0,
+          "direction": "negative",
+          "formula": "50 - (5.5 - 4.3) x 10 = 38",
+          "benchmark": "50 = neutral; 60+ = CA creating jobs faster than U.S.; <40 = lagging",
+          "source_url": "https://labormarketinfo.edd.ca.gov/data/ces.html",
+          "data_date": "2025-12",
+          "is_live": true
+        },
+        {
+          "name": "Median Home Price Premium",
+          "value": "CA median ~$801K vs. U.S. ~$420K (1.9x national median)",
+          "raw_score": 16,
+          "weighted_pts": 1.6,
+          "max_possible_pts": 10.0,
+          "direction": "negative",
+          "formula": "70 - (1.91 - 1.0) x 60 = 16",
+          "benchmark": "70 = CA matches U.S.; 40 = 1.5x; 10 = 2.0x; 0 = 2.17x+",
+          "source_url": "https://fred.stlouisfed.org/series/MSPUS",
+          "data_date": "",
+          "is_live": true
+        },
+        {
+          "name": "Top State Income Tax Rate",
+          "value": "13.3% \u2014 highest marginal rate in the U.S.",
+          "raw_score": 7,
+          "weighted_pts": 0.4,
+          "max_possible_pts": 5.0,
+          "direction": "negative",
+          "formula": "100 - 13.3 x 7.0 = 7",
+          "benchmark": "100 = 0% tax (7 states); 62 = US median ~5.5%; 7 = CA 13.3%",
+          "source_url": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2024/",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Cost of Living Index",
+          "value": "140 vs. 100 national average (MERIC 2024)",
+          "raw_score": 28,
+          "weighted_pts": 1.4,
+          "max_possible_pts": 5.0,
+          "direction": "negative",
+          "formula": "100 - (140 - 100) x 1.8 = 28",
+          "benchmark": "100 = matches national avg; 64 = COLI 120; 28 = COLI 140",
+          "source_url": "https://meric.mo.gov/data/cost-living-data-series",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Net Domestic Outmigration",
+          "value": "~-200,000 persons/yr; -5.1 per 1,000 residents",
+          "raw_score": 0,
+          "weighted_pts": 0.0,
+          "max_possible_pts": 9.0,
+          "direction": "negative",
+          "formula": "50 + (-5.1 x 15) = 0",
+          "benchmark": "50 = zero net migration; 65+ = positive inflow; <35 = heavy outflow",
+          "source_url": "https://www.census.gov/data/tables/time-series/demo/geographic-mobility/state-to-state-migration.html",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "High-Earner Outflow (IRS SOI)",
+          "value": "IRS Statistics of Income: outbound filers consistently skew to higher AGI brackets",
+          "raw_score": 30,
+          "weighted_pts": 1.1,
+          "max_possible_pts": 3.8,
+          "direction": "negative",
+          "formula": "40 - 10 = 30",
+          "benchmark": "40+ = no high-earner outflow signal; 30 = confirmed outflow",
+          "source_url": "https://www.irs.gov/statistics/soi-tax-stats-migration-data",
+          "data_date": "",
+          "is_live": false
+        },
+        {
+          "name": "Population Trend",
+          "value": "CA population ~39.0M; growth driven entirely by international migration",
+          "raw_score": 45,
+          "weighted_pts": 1.0,
+          "max_possible_pts": 2.2,
+          "direction": "neutral",
+          "formula": "55 + (mig/100K)*5 = 45",
+          "benchmark": "60+ = positive growth; 50 = flat; <40 = declining",
+          "source_url": "https://dof.ca.gov/forecasting/demographics/estimates/",
+          "data_date": "",
+          "is_live": true
         },
         {
           "name": "Homelessness",
